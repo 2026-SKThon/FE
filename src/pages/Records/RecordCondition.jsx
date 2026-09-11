@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import decoBaby from "../../assets/images/deco_baby.svg";
@@ -10,24 +10,80 @@ import CornerIllustration from "../../components/home/record/form/CornerIllustra
 import EmergencyBanner from "../../components/home/record/form/EmergencyBanner";
 import MedicationLinkSection from "../../components/home/record/form/MedicationLinkSection";
 import MemoBox from "../../components/home/record/form/MemoBox";
+
 import { CONDITION_QUESTIONS } from "../../constants/recordForm";
 import { useRecordStore } from "../../store/useRecordStore";
+import useChildStore from "../../store/useChildStore";
+
 import { buildConditionRecord } from "../../utils/record";
+import { createCondition } from "../../api/createCondition";
+import { getChildProfile } from "../../api/getChildProfile";
 
 export default function RecordCondition() {
   const navigate = useNavigate();
+
   const [answers, setAnswers] = useState({});
   const [memo, setMemo] = useState("");
+
   const addRecord = useRecordStore((state) => state.addRecord);
 
-  const handleSave = () => {
-    addRecord(buildConditionRecord({ answers, memo }));
-    navigate(-1);
+  const child = useChildStore((state) => state.child);
+  const setChild = useChildStore((state) => state.setChild);
+
+  useEffect(() => {
+    const fetchChildProfile = async () => {
+      try {
+        const data = await getChildProfile(1);
+        setChild(data);
+      } catch (error) {
+        console.error(
+          "아이 프로필 조회 실패:",
+          error.response?.data ?? error,
+        );
+      }
+    };
+
+    if (!child) {
+      fetchChildProfile();
+    }
+  }, [child, setChild]);
+
+  const handleSave = async () => {
+    if (!child) {
+      console.error("아이 정보가 아직 준비되지 않았습니다.");
+      return;
+    }
+
+    const payload = {
+      responseStatus: answers.responseStatus,
+      breathingStatus: answers.breathingStatus,
+      hydrationStatus: answers.hydrationStatus,
+      note: memo,
+    };
+
+    try {
+      await createCondition(child.childId, payload);
+
+      addRecord(
+        buildConditionRecord({
+          answers,
+          memo,
+        }),
+      );
+
+      navigate(-1);
+    } catch (error) {
+      console.error(
+        "아이 상태 기록 실패:",
+        error.response?.data ?? error,
+      );
+    }
   };
 
   return (
     <div className="relative flex flex-1 flex-col bg-[#FBFBFB]">
       <Header title="상태 기록" />
+
       <CornerIllustration
         src={decoBaby}
         width={120}
@@ -35,6 +91,7 @@ export default function RecordCondition() {
         left={250}
         top={74}
       />
+
       <div className="relative flex flex-1 flex-col justify-between px-[20px] pt-[20px] pb-[117px]">
         <div className="flex flex-col gap-[11px]">
           <p className="text-[24px] font-bold leading-[36px] text-[#191F28]">
@@ -52,7 +109,10 @@ export default function RecordCondition() {
                   options={item.options}
                   value={answers[item.key] ?? null}
                   onChange={(value) =>
-                    setAnswers((prev) => ({ ...prev, [item.key]: value }))
+                    setAnswers((prev) => ({
+                      ...prev,
+                      [item.key]: value,
+                    }))
                   }
                 />
               ))}
@@ -80,7 +140,11 @@ export default function RecordCondition() {
             value={memo}
             onChange={setMemo}
           />
-          <Button label="기록 저장하기" onClick={handleSave} />
+
+          <Button
+            label="기록 저장하기"
+            onClick={handleSave}
+          />
         </div>
       </div>
     </div>

@@ -30,3 +30,14 @@ export function mergeTrendWithRecords(trend, records) {
     },
   };
 }
+
+// 점이 많으면 선이 뭉개진다. 균등 간격으로 솎되 마지막 점은 반드시 남긴다
+export function downsamplePoints(points, max = 60) {
+  if (!points?.length || points.length <= max) return points ?? [];
+
+  const step = (points.length - 1) / (max - 1);
+
+  return Array.from({ length: max }, (_, index) =>
+    index === max - 1 ? points.at(-1) : points[Math.round(step * index)],
+  );
+}

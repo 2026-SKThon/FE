@@ -15,7 +15,7 @@ import { getTemperatureHistory } from "../../api/temperatures";
 import { CHILD_ID } from "../../constants/api";
 import { useRecordStore } from "../../store/useRecordStore";
 import { mergeRecords } from "../../utils/record";
-import { mergeTrendWithRecords } from "../../utils/trend";
+import { downsamplePoints, mergeTrendWithRecords } from "../../utils/trend";
 
 const PREVIEW_COUNT = 3;
 
@@ -34,7 +34,7 @@ export default function Records() {
         if (!history?.points?.length) return;
 
         setServerTrend({
-          points: history.points,
+          points: downsamplePoints(history.points),
           summary: {
             current: history.currentTemperature,
             highest: history.maxTemperature,

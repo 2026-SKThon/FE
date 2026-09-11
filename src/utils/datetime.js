@@ -36,3 +36,9 @@ export function formatDateTimeLabel(isoString) {
 
   return `${date.getMonth() + 1}월 ${date.getDate()}일 ${meridiem} ${hour12}:${minute}`;
 }
+
+export function formatShortDateTime(isoString) {
+  const date = new Date(isoString);
+
+  return `${date.getMonth() + 1}월 ${date.getDate()}일 ${formatTime(isoString)}`;
+}

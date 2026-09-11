@@ -3,7 +3,9 @@ import InfoBadge from "../../components/mypage/InfoBadge";
 import Button from "../../components/common/Button";
 import InfoNotice from "../../components/mypage/InfoNotice";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import useChildStore from "../../store/useChildStore";
+import { getDevice } from "../../api/getDevice";
 
 function CheckButton() {
   return (
@@ -16,6 +18,27 @@ function CheckButton() {
 export default function DeviceManagement() {
   const navigate = useNavigate();
   const child = useChildStore((state) => state.child);
+  const [device, setDevice] = useState(null);
+
+  useEffect(() => {
+    const fetchDevice = async () => {
+      try {
+        const data = await getDevice(1);
+        setDevice(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDevice();
+  }, []);
+
+  if (!device) {
+    return (
+      <div className="w-full h-full bg-[#F9FAFB] flex items-center justify-center">
+        <p className="text-[#8B95A1] text-sm">기기 정보를 불러오는 중...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full bg-[#F9FAFB]">
@@ -26,12 +49,12 @@ export default function DeviceManagement() {
         </p>
         {/* 연결된 기기 */}
         <section className="w-[353px] h-[287px] p-4 bg-white rounded-3xl flex flex-col justify-start items-start gap-2.5">
-          <InfoBadge text="● 연결됨" />
+          <InfoBadge text={device.connected ? "● 연결됨" : "● 연결 안 됨"} />
           <p className="text-[#191F28] text-xl font-bold leading-8">
-            온이 센서 A21
+            {device.deviceName}
           </p>
           <p className="text-[#6B7684] text-xs font-normal leading-5">
-            {child.name}에게 연결된 측정 기기예요.
+            {device.childName}에게 연결된 측정 기기예요.
           </p>
           {/* 마지막 데이터 수신 */}
           <div className="w-[317px] h-[39px] py-2 items-center flex justify-between gap-2">
@@ -39,7 +62,7 @@ export default function DeviceManagement() {
               마지막 데이터 수신
             </div>
             <p className="text-[#8B95A1] text-xs font-normal leading-4">
-              2분 전 ›
+              {device.lastConnectedAt} ›
             </p>
           </div>
           {/* 배터리 */}
@@ -48,7 +71,7 @@ export default function DeviceManagement() {
               배터리
             </div>
             <p className="text-[#8B95A1] text-xs font-normal leading-4">
-              정보 없음 ›
+              {device.batteryLevel} ›
             </p>
           </div>
           {/* 최근 측정 값 */}

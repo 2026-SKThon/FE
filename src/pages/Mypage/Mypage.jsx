@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import useChildStore from "../../store/useChildStore";
 
 export default function Mypage() {
   const navigate = useNavigate();
+
+  const child = useChildStore((state) => state.child);
 
   return (
     <div className="bg-[#F9FAFB] w-full h-full">
@@ -10,7 +13,7 @@ export default function Mypage() {
       </header>
       <main className="flex flex-col px-5 pt-2 pb-[117px] gap-3.5">
         <p className="text-[#191F28] text-2xl font-bold leading-9">
-          민호의 돌봄 설정
+          {child.name}의 돌봄 설정
         </p>
         {/* 현재 아이 */}
         <section className="w-[353px] h-[166px] bg-white rounded-3xl p-4 flex flex-col gap-2.5">
@@ -20,9 +23,11 @@ export default function Mypage() {
               <p className="text-[#FF4F37] text-2xl font-bold leading-9">민</p>
             </div>
             <div className="flex flex-col gap-1">
-              <p className="text-[#191F28] text-xl font-bold leading-8">민호</p>
+              <p className="text-[#191F28] text-xl font-bold leading-8">
+                {child.name}
+              </p>
               <p className="text-[#6B7684] text-xs font-normal leading-5">
-                생후 11개월 · 9.2kg
+                {child.afterBirth} · {child.weight}
               </p>
             </div>
           </div>

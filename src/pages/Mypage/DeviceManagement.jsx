@@ -3,6 +3,7 @@ import InfoBadge from "../../components/mypage/InfoBadge";
 import Button from "../../components/common/Button";
 import InfoNotice from "../../components/mypage/InfoNotice";
 import { useNavigate } from "react-router-dom";
+import useChildStore from "../../store/useChildStore";
 
 function CheckButton() {
   return (
@@ -14,6 +15,8 @@ function CheckButton() {
 
 export default function DeviceManagement() {
   const navigate = useNavigate();
+  const child = useChildStore((state) => state.child);
+
   return (
     <div className="w-full h-full bg-[#F9FAFB]">
       <MypageHeader title="기기 연결 관리" onClick={() => navigate(-1)} />
@@ -28,7 +31,7 @@ export default function DeviceManagement() {
             온이 센서 A21
           </p>
           <p className="text-[#6B7684] text-xs font-normal leading-5">
-            민호에게 연결된 측정 기기예요.
+            {child.name}에게 연결된 측정 기기예요.
           </p>
           {/* 마지막 데이터 수신 */}
           <div className="w-[317px] h-[39px] py-2 items-center flex justify-between gap-2">

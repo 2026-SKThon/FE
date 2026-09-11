@@ -2,6 +2,8 @@ import MypageHeader from "../../components/mypage/MypageHeader";
 import { useState } from "react";
 import ToggleSwitch from "../../components/mypage/ToggleSwitch";
 import Button from "../../components/common/Button";
+import { useNavigate } from "react-router-dom";
+import useChildStore from "../../store/useChildStore";
 
 function OptionButton({ title, selected, onClick }) {
   return (
@@ -25,9 +27,13 @@ export default function RecordManagement() {
   const [record, setRecord] = useState(true);
   const [result, setResult] = useState(true);
 
+  const child = useChildStore((state) => state.child);
+
+  const navigate = useNavigate();
+
   return (
     <div className="w-full h-full bg-[#F9FAFB]">
-      <MypageHeader title="기록 관리" />
+      <MypageHeader title="기록 관리" onClick={() => navigate(-1)} />
       <main className="w-[393px] h-[728px] px-5 pt-2 pb-5 flex flex-col justify-start items-start gap-2.5">
         <p className="text-[#191F28] text-xl font-bold leading-8">
           필요한 기록을 모아 저장해요
@@ -40,7 +46,7 @@ export default function RecordManagement() {
               아이
             </div>
             <p className="text-[#8B95A1] text-xs font-normal leading-4">
-              민호 ›
+              {child.name} ›
             </p>
           </div>
           {/* 기간 */}

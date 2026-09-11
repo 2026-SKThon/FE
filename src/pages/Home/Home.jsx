@@ -6,7 +6,7 @@ import QuickActions from "../../components/home/QuickActions";
 import StatusNoticeCard from "../../components/home/StatusNoticeCard";
 import TrendCard from "../../components/home/TrendCard";
 import { childStatus } from "../../constants/childStatus";
-import { FEVER_LEVEL } from "../../constants/fever";
+import { FEVER_LEVEL, RECORDS_PATH } from "../../constants/fever";
 import { recentTemperatureTrend } from "../../constants/temperatureTrend";
 import { resolveFeverLevel } from "../../utils/fever";
 
@@ -17,7 +17,10 @@ export default function Home() {
 
   return (
     <div className="flex flex-1 flex-col gap-[12px] bg-[#FBFBFB] px-[20px] pb-[117px]">
-      <HomeTopBar tag={level.tag} />
+      <HomeTopBar
+        tag={level.tag}
+        onTagClick={() => navigate(level.tag.path)}
+      />
       <FeverStatusCard
         childName={childStatus.childName}
         temperature={childStatus.currentTemperature}
@@ -31,12 +34,13 @@ export default function Home() {
           trend={recentTemperatureTrend}
           color={level.chartColor}
           showEndDot={level.showEndDot}
-          onViewRecords={() => navigate("/records")}
+          onViewRecords={() => navigate(RECORDS_PATH)}
         />
         <StatusNoticeCard {...level.notice} />
         <QuickActions
           recordLabel={level.primaryAction}
           hospitalLabel={level.secondaryAction}
+          onRecord={() => navigate(level.primaryPath)}
           onFindHospital={() => navigate("/hospital")}
         />
       </div>

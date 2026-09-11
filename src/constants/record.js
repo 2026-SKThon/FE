@@ -44,7 +44,7 @@ export const RECORD_NOTICE = {
 
 // 상태 기록 답변 중 증상으로 볼 값만 (UNKNOWN · NORMAL 제외)
 export const CONDITION_SYMPTOM = {
-  activity: { LETHARGIC: "처짐" },
-  breathing: { LABORED: "호흡 곤란" },
-  hydration: { DECREASED: "수분 섭취 감소" },
+  responseStatus: { LETHARGIC: "처짐" },
+  breathingStatus: { DIFFICULT: "호흡 곤란" },
+  hydrationStatus: { REDUCED: "수분 섭취 감소" },
 };

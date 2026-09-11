@@ -13,6 +13,7 @@ export default function Mypage() {
     const fetchChildProfile = async () => {
       try {
         const data = await getChildProfile(1);
+        console.log("받아온 data:", data);
         setChild(data);
       } catch (error) {
         console.log(error);

@@ -322,7 +322,7 @@ export default function Report() {
             <CardSubText>체온 · 복약 · 증상을 시간순으로 정리해요.</CardSubText>
           </div>
           <AiButton type="button" onClick={() => navigate("/report/analysis")}>
-            AI 분석 결과 확인하러 가기
+            요약 결과 확인하러 가기
           </AiButton>
         </SummaryBlock>
 

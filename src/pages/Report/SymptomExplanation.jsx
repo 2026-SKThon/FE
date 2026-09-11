@@ -33,10 +33,11 @@ const Card = styled.section`
   flex-direction: column;
   gap: 16px;
   margin-top: 9px;
+  margin: 20px;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
   padding: 12px;
-  box-shadow: 0px -1px 7px -2px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.05);
 `;
 
 /* 기본정보/체온변화/복약기록/동반증상 묶음 - 내부 패딩 18px, 항목 간 gap 14px */

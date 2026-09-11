@@ -1,6 +1,8 @@
 import MypageHeader from "../../components/mypage/MypageHeader";
 import InfoBadge from "../../components/mypage/InfoBadge";
 import Button from "../../components/common/Button";
+import InfoNotice from "../../components/mypage/InfoNotice";
+import { useNavigate } from "react-router-dom";
 
 function CheckButton() {
   return (
@@ -11,9 +13,10 @@ function CheckButton() {
 }
 
 export default function DeviceManagement() {
+  const navigate = useNavigate();
   return (
     <div className="w-full h-full bg-[#F9FAFB]">
-      <MypageHeader title="기기 연결 관리" />
+      <MypageHeader title="기기 연결 관리" onClick={() => navigate(-1)} />
       <main className="w-[393px] h-[728px] px-5 pt-2 pb-5 flex flex-col justify-start items-start gap-2.5">
         <p className="text-[#191F28] text-xl font-bold leading-8">
           기기 연결 상태를 확인해요
@@ -67,13 +70,11 @@ export default function DeviceManagement() {
           <CheckButton />
         </section>
         {/* 안내 */}
-        <section className="w-[353px] h-[60px] p-3 bg-[#F3F4F6] rounded-xl flex flex-col justify-start items-start mb-[20px]">
-          <div className="text-[#6B7684] text-xs font-normal leading-4">
-            기기를 연결 해제해도 이미 저장한 기록은 유지돼요. 새 측정값은 더
-            <br />
-            이상 수신하지 않아요.
-          </div>
-        </section>
+        <InfoNotice>
+          기기를 연결 해제해도 이미 저장한 기록은 유지돼요. 새 측정값은 더
+          <br />
+          이상 수신하지 않아요.
+        </InfoNotice>
         <Button label="다른 기기 연결" />
         <div className="w-full text-[#6B7684] text-xs font-normal leading-5 flex justify-center">
           현재 기기 연결 해제

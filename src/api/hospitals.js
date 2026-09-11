@@ -5,5 +5,5 @@ export async function searchHospitals({ keyword, latitude, longitude }) {
   const { data } = await api.get("/api/hospitals/search", {
     params: { keyword, latitude, longitude },
   });
-  return data.hospitals;
+  return data.data.hospitals;
 }

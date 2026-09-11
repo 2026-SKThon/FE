@@ -9,9 +9,8 @@ import DailyTrendCard from "../../components/home/record/DailyTrendCard";
 import PeriodTabs from "../../components/home/record/PeriodTabs";
 import RecordList from "../../components/home/record/RecordList";
 import { PERIOD_OPTIONS } from "../../constants/period";
-import { dailyTemperatureTrend } from "../../constants/temperatureTrend";
+import { PERIOD_TREND_MOCKS } from "../../constants/temperatureTrend";
 import { useRecordStore } from "../../store/useRecordStore";
-import { formatDateLabel } from "../../utils/datetime";
 
 const PREVIEW_COUNT = 3;
 
@@ -19,6 +18,7 @@ export default function Records() {
   const navigate = useNavigate();
   const [period, setPeriod] = useState(PERIOD_OPTIONS[0].value);
   const records = useRecordStore((state) => state.records);
+  const trend = PERIOD_TREND_MOCKS[period];
 
   return (
     <div className="flex flex-1 flex-col bg-[#FBFBFB]">
@@ -29,10 +29,7 @@ export default function Records() {
           value={period}
           onChange={setPeriod}
         />
-        <DailyTrendCard
-          trend={dailyTemperatureTrend}
-          dateLabel={formatDateLabel(dailyTemperatureTrend.date)}
-        />
+        <DailyTrendCard trend={trend} dateLabel={trend.dateLabel} />
         <Card className="flex flex-col gap-[14px]">
           <SectionHeader
             title="오늘의 기록"
@@ -41,7 +38,11 @@ export default function Records() {
           />
           <RecordList records={records.slice(0, PREVIEW_COUNT)} />
         </Card>
-        <Button label="+ 기록 추가하기" variant="soft" />
+        <Button
+          label="+ 기록 추가하기"
+          variant="soft"
+          onClick={() => navigate("/records/new")}
+        />
       </div>
     </div>
   );

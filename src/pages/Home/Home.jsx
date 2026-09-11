@@ -37,6 +37,7 @@ export default function Home() {
         <QuickActions
           recordLabel={level.primaryAction}
           hospitalLabel={level.secondaryAction}
+          onFindHospital={() => navigate("/hospital")}
         />
       </div>
     </div>

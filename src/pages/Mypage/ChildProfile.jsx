@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import InfoBadge from "../../components/mypage/InfoBadge";
 import Button from "../../components/common/Button";
+import useChildStore from "../../store/useChildStore";
 
 function OptionButton({ title, selected, onClick }) {
   return (
@@ -25,11 +26,26 @@ export default function ChildProfile() {
   const [weight, setWeight] = useState("9.2kg");
   const [allergy, setAllergy] = useState("미입력");
 
+  const child = useChildStore((state) => state.child);
+  const setChild = useChildStore((state) => state.setChild);
+
+  const handleSave = () => {
+    setChild({
+      ...child,
+      name,
+      birth,
+      weight,
+      allergy,
+    });
+
+    navigate(-1);
+  };
+
   return (
     <div className="w-full h-full bg-[#F9FAFB]">
       <MypageHeader title="아이 프로필" onClick={() => navigate(-1)} />
       <main className="w-[393px] h-[728px] px-5 pt-2 pb-5 gap-3.5 flex flex-col justify-start items-start">
-        <InfoBadge text="민호의 기본 정보" width="w-[99px]" />
+        <InfoBadge text={`${child.name}의 기본 정보`} width="w-[99px]" />
         {/* 기본 정보 */}
         <section className="w-[353px] h-[313px] p-4 bg-white rounded-3xl gap-[10px] flex flex-col">
           {/* 이름 */}
@@ -71,7 +87,7 @@ export default function ChildProfile() {
           </div>
         </section>
         {/* 추가 건강 정보 */}
-        <section className="w-[353px] h-[174px] p-4 bg-white rounded-3xl flex flex-col justify-start- items-start gap-2.5">
+        <section className="w-[353px] h-[174px] p-4 bg-white rounded-3xl flex flex-col justify-start- items-start gap-2.5 mb-[70px]">
           <p className="text-[#191F28] text-sm font-bold leading-5">알레르기</p>
           {/* 알레르기 상태 */}
           <div className="w-[321px] h-[34px] flex gap-2">
@@ -106,10 +122,8 @@ export default function ChildProfile() {
             모르는 정보는 비워 두어도 괜찮아요.
           </p>
         </section>
+        <Button label="저장하기" onClick={handleSave} />
       </main>
-      <div className="flex justify-center pb-[20px]">
-        <Button label="저장하기" />
-      </div>
     </div>
   );
 }

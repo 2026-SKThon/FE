@@ -17,6 +17,8 @@ export default function Header({ title }) {
       <div className="flex h-[21px] flex-1 items-center justify-center">
         <h1 className="text-lg font-bold leading-[21px]">{title}</h1>
       </div>
+      {/* 타이틀 가운데로 맞축 위한 빈 태그 */}
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center" />
     </header>
   );
 }

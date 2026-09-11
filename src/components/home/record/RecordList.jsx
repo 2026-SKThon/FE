@@ -9,7 +9,7 @@ export default function RecordList({ records }) {
 
         return (
           <RecordItem
-            key={record.recordId}
+            key={record.id}
             time={time}
             title={title}
             description={description}

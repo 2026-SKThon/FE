@@ -247,13 +247,14 @@ export default function Report() {
     "ko-KR",
     { hour: "2-digit", minute: "2-digit", hour12: false },
   );
-  const peakTime = new Date(
-    dailyTemperatureTrend.peak.measuredAt,
-  ).toLocaleTimeString("ko-KR", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
+  // temperatureTrend.js에 별도 peak 필드가 없어서 points 중 최고 온도 지점을 직접 찾음
+  const peakPoint = dailyTemperatureTrend.points.reduce((max, point) =>
+    point.temperature > max.temperature ? point : max,
+  );
+  const peakTime = new Date(peakPoint.measuredAt).toLocaleTimeString(
+    "ko-KR",
+    { hour: "2-digit", minute: "2-digit", hour12: false },
+  );
   const tempDiff = (highestTemp - currentTemp).toFixed(1);
 
   return (

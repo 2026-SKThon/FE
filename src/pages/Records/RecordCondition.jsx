@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import decoBaby from "../../assets/images/deco_baby.svg";
@@ -13,6 +14,8 @@ import { CONDITION_QUESTIONS } from "../../constants/recordForm";
 
 export default function RecordCondition() {
   const navigate = useNavigate();
+  const [answers, setAnswers] = useState({});
+  const [memo, setMemo] = useState("");
 
   return (
     <div className="relative flex flex-1 flex-col bg-[#FBFBFB]">
@@ -39,6 +42,10 @@ export default function RecordCondition() {
                   key={item.key}
                   label={item.question}
                   options={item.options}
+                  value={answers[item.key] ?? null}
+                  onChange={(value) =>
+                    setAnswers((prev) => ({ ...prev, [item.key]: value }))
+                  }
                 />
               ))}
             </Card>
@@ -61,6 +68,8 @@ export default function RecordCondition() {
           <MemoBox
             title="추가 메모"
             placeholder="평소와 다른 모습이 있다면 적어 주세요."
+            value={memo}
+            onChange={setMemo}
           />
           <Button label="기록 저장하기" />
         </div>

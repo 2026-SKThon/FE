@@ -33,7 +33,7 @@ export default function TemperatureStepper({
   return (
     <FilledField label={label}>
       <p className="text-[28px] font-semibold leading-[1.6] text-[#333D4B]">
-        {`${value} ${unit}`}
+        {`${value.toFixed(1)} ${unit}`}
       </p>
       <div className="flex flex-col gap-[8px]">
         <StepButton direction="up" label="체온 올리기" onClick={onIncrease} />

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Button from "../../components/common/Button";
 import Card from "../../components/common/Card";
 import ChoiceChip from "../../components/common/ChoiceChip";
@@ -14,7 +16,7 @@ import {
 } from "../../constants/recordForm";
 import { formatShortDateTime } from "../../utils/datetime";
 
-const { medicineId, medicineName, takenAt, dose, doseUnit, temperatureAtDose } =
+const { medicineName, takenAt, dose, doseUnit, temperatureAtDose } =
   MEDICATION_FORM_DEFAULT;
 
 const DOSE_ROWS = [
@@ -24,6 +26,14 @@ const DOSE_ROWS = [
 ];
 
 export default function RecordMedication() {
+  const [form, setForm] = useState({
+    medicineId: MEDICATION_FORM_DEFAULT.medicineId,
+    productInfo: null,
+    memo: "",
+  });
+
+  const updateForm = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
   return (
     <div className="flex flex-1 flex-col bg-[#FBFBFB]">
       <Header title="복약 기록" />
@@ -44,7 +54,8 @@ export default function RecordMedication() {
                 key={medicine.medicineId}
                 label={medicine.name}
                 size="md"
-                selected={medicine.medicineId === medicineId}
+                selected={medicine.medicineId === form.medicineId}
+                onClick={() => updateForm("medicineId", medicine.medicineId)}
               />
             ))}
           </div>
@@ -62,7 +73,13 @@ export default function RecordMedication() {
           </p>
           <div className="flex items-center gap-[8px]">
             {PRODUCT_INFO_OPTIONS.map((option) => (
-              <ChoiceChip key={option.value} label={option.label} size="plain" />
+              <ChoiceChip
+                key={option.value}
+                label={option.label}
+                size="plain"
+                selected={option.value === form.productInfo}
+                onClick={() => updateForm("productInfo", option.value)}
+              />
             ))}
           </div>
         </Card>
@@ -70,6 +87,8 @@ export default function RecordMedication() {
         <MemoBox
           title="추가 메모"
           placeholder="평소와 다른 모습이 있다면 적어 주세요."
+          value={form.memo}
+          onChange={(value) => updateForm("memo", value)}
         />
 
         <Button label="복약 기록 저장하기" size="md" />

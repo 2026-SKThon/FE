@@ -7,6 +7,7 @@ import {
   RECENT_MEDICINES,
 } from "../constants/recordForm";
 import { formatTime } from "./datetime";
+import { formatTemperature } from "./fever";
 
 // 선택한 답변 중 증상에 해당하는 것만
 function collectSymptoms(condition = {}) {
@@ -51,7 +52,7 @@ export function formatRecord(record) {
 
   return {
     time,
-    title: `${record.temperature}°C 측정`,
+    title: `${formatTemperature(record.temperature)} 측정`,
     description: RECORD_SOURCE_DESCRIPTION[record.source],
     type: record.type,
   };

@@ -10,7 +10,9 @@ export function resolveFeverLevel({ deviceConnected, currentTemperature }) {
 }
 
 export function formatTemperature(value) {
-  return value === null || value === undefined ? "- °C" : `${value}°C`;
+  if (value === null || value === undefined) return "- °C";
+
+  return `${value.toFixed(1)}°C`;
 }
 
 const TEMPERATURE_RANGE = { MIN: 34.0, MAX: 42.0 };

@@ -77,7 +77,7 @@ export const PERIOD_TREND_MOCKS = {
     {
       date: "2026-08-16",
       dateLabel: "8월 16일 일요일",
-      axisLabels: ["16시", "18시", "20시", "지금"],
+      axisLabels: ["16시", "18시", "20시", "21시"],
       summary: { current: 36.6, highest: 36.6, lowest: 36.4 },
       referenceTemperatures: [37, 38],
       points: [
@@ -98,7 +98,7 @@ export const PERIOD_TREND_MOCKS = {
     {
       date: "2026-08-17",
       dateLabel: "8월 17일 월요일",
-      axisLabels: ["16시", "18시", "20시", "지금"],
+      axisLabels: ["16시", "18시", "20시", "21시"],
       summary: { current: 37.2, highest: 39.1, lowest: 36.6 },
       referenceTemperatures: [37, 38],
       points: [
@@ -119,7 +119,7 @@ export const PERIOD_TREND_MOCKS = {
     {
       date: "2026-08-18",
       dateLabel: "8월 18일 화요일",
-      axisLabels: ["16시", "18시", "20시", "지금"],
+      axisLabels: ["16시", "18시", "20시", "21시"],
       summary: { current: 36.9, highest: 38.3, lowest: 36.9 },
       referenceTemperatures: [37, 38],
       points: [
@@ -140,7 +140,7 @@ export const PERIOD_TREND_MOCKS = {
     {
       date: "2026-08-19",
       dateLabel: "8월 19일 수요일",
-      axisLabels: ["16시", "18시", "20시", "지금"],
+      axisLabels: ["16시", "18시", "20시", "21시"],
       summary: { current: 36.9, highest: 37.4, lowest: 36.8 },
       referenceTemperatures: [37, 38],
       points: [

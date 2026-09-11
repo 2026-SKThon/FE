@@ -17,6 +17,7 @@ import DeviceManagement from "./pages/Mypage/DeviceManagement";
 import Guardian from "./pages/Mypage/Guardian";
 import Notification from "./pages/Mypage/Notification";
 import RecordManagement from "./pages/Mypage/RecordManagement";
+import HospitalList from "./pages/Hospital/HospitalList";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
             element={<RecordMedication />}
           />
           <Route path="/hospital" element={<Hospital />} />
+          <Route path="/hospital/list" element={<HospitalList />} />
           <Route path="/report" element={<Report />} />
           <Route path="/report/analysis" element={<Analysis />} />
           <Route

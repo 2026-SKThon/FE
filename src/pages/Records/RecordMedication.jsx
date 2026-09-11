@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../../components/common/Button";
 import Card from "../../components/common/Card";
@@ -14,6 +15,8 @@ import {
   PRODUCT_INFO_OPTIONS,
   RECENT_MEDICINES,
 } from "../../constants/recordForm";
+import { useRecordStore } from "../../store/useRecordStore";
+import { buildMedicationRecord } from "../../utils/record";
 import { formatShortDateTime } from "../../utils/datetime";
 
 const { medicineName, takenAt, dose, doseUnit, temperatureAtDose } =
@@ -26,6 +29,8 @@ const DOSE_ROWS = [
 ];
 
 export default function RecordMedication() {
+  const navigate = useNavigate();
+  const addRecord = useRecordStore((state) => state.addRecord);
   const [form, setForm] = useState({
     medicineId: MEDICATION_FORM_DEFAULT.medicineId,
     productInfo: null,
@@ -33,6 +38,11 @@ export default function RecordMedication() {
   });
 
   const updateForm = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  const handleSave = () => {
+    addRecord(buildMedicationRecord(form));
+    navigate(-1);
+  };
 
   return (
     <div className="flex flex-1 flex-col bg-[#FBFBFB]">
@@ -91,7 +101,7 @@ export default function RecordMedication() {
           onChange={(value) => updateForm("memo", value)}
         />
 
-        <Button label="복약 기록 저장하기" size="md" />
+        <Button label="복약 기록 저장하기" size="md" onClick={handleSave} />
       </div>
     </div>
   );

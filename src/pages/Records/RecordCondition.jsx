@@ -11,11 +11,19 @@ import EmergencyBanner from "../../components/home/record/form/EmergencyBanner";
 import MedicationLinkSection from "../../components/home/record/form/MedicationLinkSection";
 import MemoBox from "../../components/home/record/form/MemoBox";
 import { CONDITION_QUESTIONS } from "../../constants/recordForm";
+import { useRecordStore } from "../../store/useRecordStore";
+import { buildConditionRecord } from "../../utils/record";
 
 export default function RecordCondition() {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
   const [memo, setMemo] = useState("");
+  const addRecord = useRecordStore((state) => state.addRecord);
+
+  const handleSave = () => {
+    addRecord(buildConditionRecord({ answers, memo }));
+    navigate(-1);
+  };
 
   return (
     <div className="relative flex flex-1 flex-col bg-[#FBFBFB]">
@@ -60,6 +68,7 @@ export default function RecordCondition() {
             <EmergencyBanner
               message="깨우기 어렵거나 숨쉬기 힘들어요"
               actionLabel="긴급 도움 요청"
+              onAction={() => navigate("/hospital")}
             />
           </div>
         </div>
@@ -71,7 +80,7 @@ export default function RecordCondition() {
             value={memo}
             onChange={setMemo}
           />
-          <Button label="기록 저장하기" />
+          <Button label="기록 저장하기" onClick={handleSave} />
         </div>
       </div>
     </div>

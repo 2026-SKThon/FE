@@ -7,10 +7,11 @@ import TrendCard from "../../components/home/TrendCard";
 import { childStatus } from "../../constants/childStatus";
 import { FEVER_LEVEL } from "../../constants/fever";
 import { recentTemperatureTrend } from "../../constants/temperatureTrend";
-import { buildMeasureCaption } from "../../utils/fever";
+import { resolveFeverLevel } from "../../utils/fever";
 
 export default function Home() {
   const navigate = useNavigate();
+  const level = FEVER_LEVEL[resolveFeverLevel(childStatus)];
 
   return (
     <div className="flex flex-1 flex-col gap-[12px] bg-[#FBFBFB] px-[20px] pb-[117px]">
@@ -18,17 +19,21 @@ export default function Home() {
       <FeverStatusCard
         childName={childStatus.childName}
         temperature={childStatus.currentTemperature}
-        statusMessage={FEVER_LEVEL[childStatus.feverLevel].message}
-        caption={buildMeasureCaption(childStatus)}
+        temperatureColor={level.temperatureColor}
+        showChildLabel={level.showChildLabel}
+        statusMessage={level.pill.message}
+        caption={childStatus.caption}
       />
       <TrendCard
         title="최근 6시간"
         trend={recentTemperatureTrend}
+        color={level.chartColor}
+        showEndDot={level.showEndDot}
         onViewRecords={() => navigate("/records")}
       />
       <QuickActions
-        recordLabel="아이 상태 기록하기"
-        hospitalLabel="가까운 병원·약국 찾기"
+        recordLabel={level.primaryAction}
+        hospitalLabel={level.secondaryAction}
       />
     </div>
   );

@@ -6,6 +6,8 @@ import Button from "../../components/common/Button";
 import Toast from "../../components/common/Toast";
 import { symptomExplanationInfo } from "../../constants/symptomExplanation";
 import { dailyTemperatureTrend } from "../../constants/temperatureTrend";
+import { useRecordStore } from "../../store/useRecordStore";
+import { buildSymptomDescription } from "../../utils/record";
 
 /* 페이지 전체 래퍼 - 고정 Footer(97px)에 마지막 콘텐츠가 가리지 않도록 하단 여백 */
 const PageWrapper = styled.div`
@@ -185,14 +187,21 @@ function buildChartData() {
 }
 
 /* 복사하기/공유하기 공용 - 증상 설명문 요약 텍스트 */
-function buildSummaryText() {
-  return symptomExplanationInfo
+function buildSummaryText(infoRows) {
+  return infoRows
     .map((info) => `${info.title}\n${info.description.replace(/\n/g, " ")}`)
     .join("\n\n");
 }
 
 export default function SymptomExplanation() {
   const { linePoints, areaPoints, medicationX } = buildChartData();
+  const records = useRecordStore((state) => state.records);
+  const latestCondition = records.find((record) => record.type === "CONDITION");
+  const infoRows = symptomExplanationInfo.map((info) =>
+    info.id === "symptom" && latestCondition
+      ? { ...info, description: buildSymptomDescription(latestCondition.condition) }
+      : info,
+  );
   const [toastMessage, setToastMessage] = useState("");
   const cardRef = useRef(null);
 
@@ -241,7 +250,7 @@ export default function SymptomExplanation() {
     }
 
     try {
-      await navigator.clipboard.writeText(buildSummaryText());
+      await navigator.clipboard.writeText(buildSummaryText(infoRows));
       showToastMessage("클립보드에 복사되었습니다");
     } catch {
       showToastMessage("복사에 실패했어요");
@@ -280,7 +289,7 @@ export default function SymptomExplanation() {
       }
     }
 
-    const text = buildSummaryText();
+    const text = buildSummaryText(infoRows);
     if (navigator.share) {
       try {
         await navigator.share({ title: "증상 설명문", text });
@@ -306,7 +315,7 @@ export default function SymptomExplanation() {
       </NoticeBox>
       <Card ref={cardRef}>
         <InfoBox>
-          {symptomExplanationInfo.map((info) => (
+          {infoRows.map((info) => (
             <InfoRow key={info.id}>
               <InfoRowTitle>{info.title}</InfoRowTitle>
               <InfoRowDesc>

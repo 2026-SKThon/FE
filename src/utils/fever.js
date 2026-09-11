@@ -1,11 +1,14 @@
-// "2분 전 측정 · 30분 전보다 0.4°C ↑"
-export function buildMeasureCaption({
-  minutesSinceMeasured,
-  deltaTemperature,
-  deltaIntervalMinutes,
-}) {
-  const direction = deltaTemperature >= 0 ? "↑" : "↓";
-  const delta = Math.abs(deltaTemperature).toFixed(1);
+import { FEVER_THRESHOLD } from "../constants/fever";
 
-  return `${minutesSinceMeasured}분 전 측정 · ${deltaIntervalMinutes}분 전보다 ${delta}°C ${direction}`;
+// 36.4 미만도 NORMAL로 본다 (디자인에 저체온 상태 없음)
+export function resolveFeverLevel({ deviceConnected, currentTemperature }) {
+  if (!deviceConnected || currentTemperature === null) return "OFFLINE";
+  if (currentTemperature >= FEVER_THRESHOLD.DANGER) return "DANGER";
+  if (currentTemperature >= FEVER_THRESHOLD.CAUTION) return "CAUTION";
+
+  return "NORMAL";
+}
+
+export function formatTemperature(value) {
+  return value === null || value === undefined ? "- °C" : `${value}°C`;
 }

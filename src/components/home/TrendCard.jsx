@@ -4,7 +4,13 @@ import SectionHeader from "../common/SectionHeader";
 import TemperatureChart from "../common/TemperatureChart";
 import { buildTimeAxisLabels } from "../../utils/datetime";
 
-export default function TrendCard({ title, trend, onViewRecords }) {
+export default function TrendCard({
+  title,
+  trend,
+  color,
+  showEndDot,
+  onViewRecords,
+}) {
   return (
     <Card className="flex flex-col gap-[8px]">
       <SectionHeader
@@ -15,8 +21,8 @@ export default function TrendCard({ title, trend, onViewRecords }) {
       <TemperatureChart
         points={trend.points}
         size="mini"
-        peak={trend.peak}
-        referenceTemperatures={trend.referenceTemperatures}
+        color={color}
+        showEndDot={showEndDot}
       />
       <ChartTimeAxis labels={buildTimeAxisLabels(trend.points)} />
     </Card>

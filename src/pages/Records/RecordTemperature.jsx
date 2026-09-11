@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import decoThermometer from "../../assets/images/deco_thermometer.svg";
 import Button from "../../components/common/Button";
@@ -15,9 +16,13 @@ import {
   TEMPERATURE_FORM_DEFAULT,
 } from "../../constants/recordForm";
 import { formatDateTimeLabel } from "../../utils/datetime";
+import { useRecordStore } from "../../store/useRecordStore";
+import { buildTemperatureRecord } from "../../utils/record";
 import { stepTemperature } from "../../utils/fever";
 
 export default function RecordTemperature() {
+  const navigate = useNavigate();
+  const addRecord = useRecordStore((state) => state.addRecord);
   const [form, setForm] = useState({
     temperature: TEMPERATURE_FORM_DEFAULT.temperature,
     bodyPart: TEMPERATURE_FORM_DEFAULT.bodyPart,
@@ -25,6 +30,11 @@ export default function RecordTemperature() {
   });
 
   const updateForm = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  const handleSave = () => {
+    addRecord(buildTemperatureRecord(form));
+    navigate(-1);
+  };
 
   return (
     <div className="relative flex flex-1 flex-col bg-[#FBFBFB]">
@@ -82,7 +92,7 @@ export default function RecordTemperature() {
           직접 입력한 체온은 기기 측정값과 구분해서 표시해요.
         </p>
 
-        <Button label="기록 저장하기" />
+        <Button label="기록 저장하기" onClick={handleSave} />
       </div>
     </div>
   );

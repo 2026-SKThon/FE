@@ -12,7 +12,7 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 8px 20px 16px;
+  padding: 8px 20px 117px;
 `;
 
 /* 블럭 공통 - 내부 패딩 18px */

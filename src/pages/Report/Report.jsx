@@ -7,7 +7,7 @@ import { dailyTemperatureTrend } from "../../constants/temperatureTrend";
 
 /* 페이지 좌우 공통 여백 20px */
 const Wrapper = styled.div`
-  padding: 0 20px;
+  padding: 0 20px 117px;
 `;
 
 /* 상단 헤더 영역 - 타이틀 + 날짜 뱃지 */

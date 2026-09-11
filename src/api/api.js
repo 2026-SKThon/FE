@@ -1,13 +1,12 @@
 import axios from "axios";
 
-// TODO: 로그인 붙기 전까지 임시 고정값
-const USER_ID = "1";
+import { USER_ID } from "../constants/api";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    "X-USER-ID": USER_ID,
+    "X-USER-ID": String(USER_ID),
   },
 });
 

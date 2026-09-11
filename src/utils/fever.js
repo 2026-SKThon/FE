@@ -23,3 +23,27 @@ export function stepTemperature(value, delta) {
 
   return Math.min(Math.max(next, TEMPERATURE_RANGE.MIN), TEMPERATURE_RANGE.MAX);
 }
+
+function formatElapsed(isoString) {
+  const minutes = Math.max(
+    0,
+    Math.floor((Date.now() - new Date(isoString).getTime()) / 60000),
+  );
+
+  if (minutes < 60) return `${minutes}분 전`;
+  if (minutes < 60 * 24) return `${Math.floor(minutes / 60)}시간 전`;
+
+  return `${Math.floor(minutes / (60 * 24))}일 전`;
+}
+
+// "2분 전 측정 · 0.4°C ↑" / 변화가 없으면 "2분 전 측정"
+export function buildMeasureCaption({ lastMeasuredAt, temperatureDifference }) {
+  const measured = `${formatElapsed(lastMeasuredAt)} 측정`;
+
+  if (!temperatureDifference) return measured;
+
+  const direction = temperatureDifference > 0 ? "↑" : "↓";
+  const delta = Math.abs(temperatureDifference).toFixed(1);
+
+  return `${measured} · ${delta}°C ${direction}`;
+}

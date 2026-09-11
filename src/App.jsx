@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
 import Home from "./pages/Home/Home";
 import Hospital from "./pages/Hospital/Hospital";
+import Records from "./pages/Records/Records";
 import Report from "./pages/Report/Report";
 import Analysis from "./pages/Report/Analysis";
 import Mypage from "./pages/Mypage/Mypage";
@@ -17,6 +18,7 @@ export default function App() {
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/records" element={<Records />} />
           <Route path="/hospital" element={<Hospital />} />
           <Route path="/report" element={<Report />} />
           <Route path="/report/analysis" element={<Analysis />} />

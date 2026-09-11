@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import FeverStatusCard from "../../components/home/FeverStatusCard";
 import HomeTopBar from "../../components/home/HomeTopBar";
 import QuickActions from "../../components/home/QuickActions";
@@ -8,6 +10,8 @@ import { recentTemperatureTrend } from "../../constants/temperatureTrend";
 import { buildMeasureCaption } from "../../utils/fever";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-1 flex-col gap-[12px] bg-[#FBFBFB] px-[20px] pb-[117px]">
       <HomeTopBar deviceConnected={childStatus.deviceConnected} />
@@ -17,7 +21,11 @@ export default function Home() {
         statusMessage={FEVER_LEVEL[childStatus.feverLevel].message}
         caption={buildMeasureCaption(childStatus)}
       />
-      <TrendCard title="최근 6시간" trend={recentTemperatureTrend} />
+      <TrendCard
+        title="최근 6시간"
+        trend={recentTemperatureTrend}
+        onViewRecords={() => navigate("/records")}
+      />
       <QuickActions
         recordLabel="아이 상태 기록하기"
         hospitalLabel="가까운 병원·약국 찾기"

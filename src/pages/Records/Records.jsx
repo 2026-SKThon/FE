@@ -9,16 +9,30 @@ import DailyTrendCard from "../../components/home/record/DailyTrendCard";
 import PeriodTabs from "../../components/home/record/PeriodTabs";
 import RecordList from "../../components/home/record/RecordList";
 import { PERIOD_OPTIONS } from "../../constants/period";
-import { dailyTemperatureTrend } from "../../constants/temperatureTrend";
+import { PERIOD_TREND_MOCKS } from "../../constants/temperatureTrend";
 import { useRecordStore } from "../../store/useRecordStore";
-import { formatDateLabel } from "../../utils/datetime";
+import { mergeTrendWithRecords } from "../../utils/trend";
 
 const PREVIEW_COUNT = 3;
 
 export default function Records() {
   const navigate = useNavigate();
   const [period, setPeriod] = useState(PERIOD_OPTIONS[0].value);
+  const [index, setIndex] = useState(PERIOD_TREND_MOCKS[period].length - 1);
   const records = useRecordStore((state) => state.records);
+
+  const periodTrends = PERIOD_TREND_MOCKS[period];
+  const lastIndex = periodTrends.length - 1;
+  const isLatest = index === lastIndex;
+  const trend = isLatest
+    ? mergeTrendWithRecords(periodTrends[index], records)
+    : periodTrends[index];
+
+  // 기간을 바꾸면 항상 가장 최근으로
+  const changePeriod = (value) => {
+    setPeriod(value);
+    setIndex(PERIOD_TREND_MOCKS[value].length - 1);
+  };
 
   return (
     <div className="flex flex-1 flex-col bg-[#FBFBFB]">
@@ -27,11 +41,15 @@ export default function Records() {
         <PeriodTabs
           options={PERIOD_OPTIONS}
           value={period}
-          onChange={setPeriod}
+          onChange={changePeriod}
         />
         <DailyTrendCard
-          trend={dailyTemperatureTrend}
-          dateLabel={formatDateLabel(dailyTemperatureTrend.date)}
+          trend={trend}
+          dateLabel={trend.dateLabel}
+          showPrev={index > 0}
+          showNext={!isLatest}
+          onPrevDate={() => setIndex((prev) => prev - 1)}
+          onNextDate={() => setIndex((prev) => prev + 1)}
         />
         <Card className="flex flex-col gap-[14px]">
           <SectionHeader
@@ -41,7 +59,11 @@ export default function Records() {
           />
           <RecordList records={records.slice(0, PREVIEW_COUNT)} />
         </Card>
-        <Button label="+ 기록 추가하기" variant="soft" />
+        <Button
+          label="+ 기록 추가하기"
+          variant="soft"
+          onClick={() => navigate("/records/new")}
+        />
       </div>
     </div>
   );

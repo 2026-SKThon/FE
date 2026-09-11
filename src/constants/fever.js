@@ -4,10 +4,15 @@ export const FEVER_THRESHOLD = {
   DANGER: 38.5,
 };
 
+const DEVICE_PATH = "/mypage/device";
+const CONDITION_PATH = "/records/new/condition";
+export const RECORDS_PATH = "/records";
+
 const CONNECTED_TAG = {
   label: "기기 연결",
   background: "#FFEBE9",
   color: "#FF4F37",
+  path: DEVICE_PATH,
 };
 
 export const FEVER_LEVEL = {
@@ -30,6 +35,7 @@ export const FEVER_LEVEL = {
       description: "아이의 상태도 평소와 같은지 살펴봐 주세요.",
     },
     primaryAction: "아이 상태 기록하기",
+    primaryPath: CONDITION_PATH,
     secondaryAction: "복약 • 증상 기록 함께 보기",
   },
 
@@ -52,6 +58,7 @@ export const FEVER_LEVEL = {
       description: "체온 변화와 아이의 반응을 함께 확인해요.",
     },
     primaryAction: "지금 아이 상태 확인",
+    primaryPath: RECORDS_PATH,
     secondaryAction: "가까운 병원·약국 찾기",
   },
 
@@ -74,6 +81,7 @@ export const FEVER_LEVEL = {
       description: "아이의 반응과 호흡 상태도 함께 확인해요.",
     },
     primaryAction: "지금 아이 상태 확인",
+    primaryPath: RECORDS_PATH,
     secondaryAction: "긴급 증상이 있나요? 도움 요청",
   },
 
@@ -86,6 +94,7 @@ export const FEVER_LEVEL = {
       label: "연결 확인 필요",
       background: "#F3F4F6",
       color: "#8B95A1",
+      path: DEVICE_PATH,
     },
     pill: {
       variant: "solid",
@@ -100,6 +109,7 @@ export const FEVER_LEVEL = {
       description: "기기 연결 상태와 센서 부착을 확인해 주세요.",
     },
     primaryAction: "기기 연결 확인하기",
+    primaryPath: DEVICE_PATH,
     secondaryAction: "체온계 측정·아이 상태 확인",
   },
 };

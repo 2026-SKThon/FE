@@ -15,6 +15,7 @@ import { childStatus } from "../../constants/childStatus";
 import { FEVER_LEVEL, RECORDS_PATH } from "../../constants/fever";
 import { recentTemperatureTrend } from "../../constants/temperatureTrend";
 import { buildMeasureCaption, resolveFeverLevel } from "../../utils/fever";
+import { downsamplePoints } from "../../utils/trend";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ export default function Home() {
       .then((history) => {
         if (!history?.points?.length) return;
 
-        setTrend({ points: history.points });
+        setTrend({ points: downsamplePoints(history.points) });
       })
       .catch(() => {});
   }, []);

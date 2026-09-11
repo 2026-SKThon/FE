@@ -5,17 +5,27 @@ export function formatTime(isoString) {
   return `${hour}:${minute}`;
 }
 
-// 그래프 하단 시간축 라벨 생성
+// 그래프 하단 시간축 라벨 - 점 개수가 아닌 시간 범위를 균등 분할한다
+// 센서가 몰려 찍히는 구간이 있어 인덱스로 나누면 라벨이 중복된다
+const HOUR_LABEL_MIN_SPAN_HOURS = 3;
+
 export function buildTimeAxisLabels(points, count = 4) {
   if (!points?.length) return [];
   if (count < 2) return ["지금"];
 
-  const step = (points.length - 1) / (count - 1);
+  const start = new Date(points[0].measuredAt).getTime();
+  const end = new Date(points.at(-1).measuredAt).getTime();
+  const spanHours = (end - start) / (60 * 60 * 1000);
+  const useHourOnly = spanHours >= HOUR_LABEL_MIN_SPAN_HOURS;
 
   return Array.from({ length: count }, (_, index) => {
     if (index === count - 1) return "지금";
-    const point = points[Math.round(step * index)];
-    return `${new Date(point.measuredAt).getHours()}시`;
+
+    const date = new Date(start + ((end - start) * index) / (count - 1));
+
+    return useHourOnly
+      ? `${date.getHours()}시`
+      : `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
   });
 }
 
@@ -52,4 +62,17 @@ export function toServerDateTime(date = new Date()) {
     `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
     `T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
   );
+}
+
+export function formatWeekRangeLabel(startIso, endIso) {
+  const start = new Date(startIso);
+  const end = new Date(endIso);
+
+  return `${start.getMonth() + 1}월 ${start.getDate()}일 - ${end.getMonth() + 1}월 ${end.getDate()}일`;
+}
+
+export function formatMonthLabel(isoString) {
+  const date = new Date(isoString);
+
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 }

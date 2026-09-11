@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Header from "../../components/header/header";
 import Button from "../../components/common/Button";
@@ -15,6 +16,7 @@ import { formatDateLabel } from "../../utils/datetime";
 const PREVIEW_COUNT = 3;
 
 export default function Records() {
+  const navigate = useNavigate();
   const [period, setPeriod] = useState(PERIOD_OPTIONS[0].value);
   const records = useRecordStore((state) => state.records);
 
@@ -32,7 +34,11 @@ export default function Records() {
           dateLabel={formatDateLabel(dailyTemperatureTrend.date)}
         />
         <Card className="flex flex-col gap-[14px]">
-          <SectionHeader title="오늘의 기록" actionLabel="전체 보기" />
+          <SectionHeader
+            title="오늘의 기록"
+            actionLabel="전체 보기"
+            onAction={() => navigate("/records/today")}
+          />
           <RecordList records={records.slice(0, PREVIEW_COUNT)} />
         </Card>
         <Button label="+ 기록 추가하기" variant="soft" />

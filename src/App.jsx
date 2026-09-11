@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
 import Home from "./pages/Home/Home";
 import Hospital from "./pages/Hospital/Hospital";
+import HospitalList from "./pages/Hospital/HospitalList";
 import Records from "./pages/Records/Records";
 import RecordsAll from "./pages/Records/RecordsAll";
 import RecordAdd from "./pages/Records/RecordAdd";
@@ -37,6 +38,7 @@ export default function App() {
             element={<RecordMedication />}
           />
           <Route path="/hospital" element={<Hospital />} />
+          <Route path="/hospital/list" element={<HospitalList />} />
           <Route path="/report" element={<Report />} />
           <Route path="/report/analysis" element={<Analysis />} />
           <Route

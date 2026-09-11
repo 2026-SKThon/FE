@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import FeverStatusCard from "../../components/home/FeverStatusCard";
@@ -10,7 +10,8 @@ import {
   getLatestTemperature,
   getTemperatureHistory,
 } from "../../api/temperatures";
-import { CHILD_ID } from "../../constants/api";
+import { CHILD_ID, POLL_INTERVAL_MS } from "../../constants/api";
+import { usePolling } from "../../hooks/usePolling";
 import { childStatus } from "../../constants/childStatus";
 import { FEVER_LEVEL, RECORDS_PATH } from "../../constants/fever";
 import { recentTemperatureTrend } from "../../constants/temperatureTrend";
@@ -23,28 +24,25 @@ export default function Home() {
   const [status, setStatus] = useState(childStatus);
   const [trend, setTrend] = useState(recentTemperatureTrend);
 
-  useEffect(() => {
-    getLatestTemperature(CHILD_ID)
-      .then((latest) => {
-        if (latest?.currentTemperature == null) return;
+  usePolling(async () => {
+    const [latest, history] = await Promise.allSettled([
+      getLatestTemperature(CHILD_ID),
+      getTemperatureHistory(CHILD_ID),
+    ]);
 
-        setStatus({
-          ...childStatus,
-          currentTemperature: latest.currentTemperature,
-          measuredAt: latest.lastMeasuredAt,
-          caption: buildMeasureCaption(latest),
-        });
-      })
-      .catch(() => {});
+    if (latest.status === "fulfilled" && latest.value?.currentTemperature != null) {
+      setStatus({
+        ...childStatus,
+        currentTemperature: latest.value.currentTemperature,
+        measuredAt: latest.value.lastMeasuredAt,
+        caption: buildMeasureCaption(latest.value),
+      });
+    }
 
-    getTemperatureHistory(CHILD_ID)
-      .then((history) => {
-        if (!history?.points?.length) return;
-
-        setTrend({ points: downsamplePoints(history.points) });
-      })
-      .catch(() => {});
-  }, []);
+    if (history.status === "fulfilled" && history.value?.points?.length) {
+      setTrend({ points: downsamplePoints(history.value.points) });
+    }
+  }, POLL_INTERVAL_MS);
 
   const levelKey = resolveFeverLevel(status);
   const level = FEVER_LEVEL[levelKey];

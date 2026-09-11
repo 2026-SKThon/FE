@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import useChildStore from "../../store/useChildStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getChildProfile } from "../../api/getChildProfile";
+import { getDevice } from "../../api/getDevice";
 
 export default function Mypage() {
   const navigate = useNavigate();
 
   const child = useChildStore((state) => state.child);
   const setChild = useChildStore((state) => state.setChild);
+  const [device, setDevice] = useState(null);
 
   useEffect(() => {
     const fetchChildProfile = async () => {
       try {
         const data = await getChildProfile(1);
-        console.log("받아온 data:", data);
         setChild(data);
       } catch (error) {
         console.log(error);
@@ -22,10 +23,31 @@ export default function Mypage() {
     fetchChildProfile();
   }, []);
 
+  useEffect(() => {
+    const fetchDevice = async () => {
+      try {
+        const data = await getDevice(1);
+        setDevice(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDevice();
+  }, []);
+
   if (!child) {
     return (
       <div className="bg-[#F9FAFB] w-full h-full flex items-center justify-center">
         <p className="text-[#8B95A1] text-sm">아이 정보를 불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (!device) {
+    return (
+      <div className="w-full h-full bg-[#F9FAFB] flex items-center justify-center">
+        <p className="text-[#8B95A1] text-sm">기기 정보를 불러오는 중...</p>
       </div>
     );
   }

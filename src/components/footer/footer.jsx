@@ -12,6 +12,7 @@ const menus = [
   {
     label: "홈",
     path: "/",
+    matchPaths: ["/records"],
     activeIcon: homeActive,
     inactiveIcon: homeInactive,
   },
@@ -45,7 +46,10 @@ export default function Footer() {
         {menus.map((menu) => {
           const isActive =
             menu.path === "/"
-              ? location.pathname === "/"
+              ? location.pathname === "/" ||
+                menu.matchPaths?.some((path) =>
+                  location.pathname.startsWith(path),
+                )
               : location.pathname.startsWith(menu.path);
 
           return (

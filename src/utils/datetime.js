@@ -18,3 +18,11 @@ export function buildTimeAxisLabels(points, count = 4) {
     return `${new Date(point.measuredAt).getHours()}시`;
   });
 }
+
+const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
+
+export function formatDateLabel(isoString) {
+  const date = new Date(isoString);
+
+  return `${date.getMonth() + 1}월 ${date.getDate()}일 ${WEEKDAYS[date.getDay()]}요일`;
+}

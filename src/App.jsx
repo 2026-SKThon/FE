@@ -5,6 +5,9 @@ import Hospital from "./pages/Hospital/Hospital";
 import Records from "./pages/Records/Records";
 import RecordsAll from "./pages/Records/RecordsAll";
 import RecordAdd from "./pages/Records/RecordAdd";
+import RecordTemperature from "./pages/Records/RecordTemperature";
+import RecordCondition from "./pages/Records/RecordCondition";
+import RecordMedication from "./pages/Records/RecordMedication";
 import Report from "./pages/Report/Report";
 import Analysis from "./pages/Report/Analysis";
 import SymptomExplanation from "./pages/Report/SymptomExplanation";
@@ -24,6 +27,15 @@ export default function App() {
           <Route path="/records" element={<Records />} />
           <Route path="/records/today" element={<RecordsAll />} />
           <Route path="/records/new" element={<RecordAdd />} />
+          <Route
+            path="/records/new/temperature"
+            element={<RecordTemperature />}
+          />
+          <Route path="/records/new/condition" element={<RecordCondition />} />
+          <Route
+            path="/records/new/medication"
+            element={<RecordMedication />}
+          />
           <Route path="/hospital" element={<Hospital />} />
           <Route path="/report" element={<Report />} />
           <Route path="/report/analysis" element={<Analysis />} />

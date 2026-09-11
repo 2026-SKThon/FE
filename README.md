@@ -125,6 +125,8 @@ STEP 4 · AI
 - `develop` : 개발 브랜치
 - `feat/#이슈번호/명칭` : 새로운 기능 개발 브랜치
   - 예시 : `feat/#12/temperature`
+- `fix/#이슈번호/명칭` : 버그 수정 브랜치
+  - 예시 : `fix/#12/temperature-chart`
 - `ui/#이슈번호/명칭` : UI 작업 브랜치
   - 예시 : `ui/#12/home`
 - `docs/#이슈번호/명칭` : 문서 작성 및 수정 브랜치

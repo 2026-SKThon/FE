@@ -7,6 +7,10 @@ const CHIP_SIZE = {
     base: "px-[12px] py-[8px] text-[12px] font-bold",
     idle: "text-[#6B7684]",
   },
+  plain: {
+    base: "p-[8px] text-[12px] font-normal",
+    idle: "text-[#6B7684]",
+  },
 };
 
 export default function ChoiceChip({

@@ -13,7 +13,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
-      className={`w-full cursor-pointer rounded-[8px] px-[16px] py-[12px] text-center text-[18px] font-semibold leading-[1.6] ${VARIANT[variant]}`}
+      className={`w-[353px] cursor-pointer rounded-[8px] px-[16px] py-[12px] text-center text-[18px] font-semibold leading-[1.6] ${VARIANT[variant]}`}
     >
       {label}
     </button>

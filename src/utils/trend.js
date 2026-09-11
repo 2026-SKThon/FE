@@ -6,7 +6,7 @@ export function mergeTrendWithRecords(trend, records) {
   const added = records
     .filter(
       (record) =>
-        record.type === "TEMPERATURE" &&
+        record.recordType === "TEMPERATURE" &&
         Date.parse(record.recordedAt) > lastMeasuredAt,
     )
     .map((record) => ({

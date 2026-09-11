@@ -13,3 +13,12 @@ export async function getTemperatureHistory(childId) {
   );
   return response.data.data;
 }
+
+// POST /api/children/{childId}/temperatures - 체온 기록 저장
+export async function createTemperature(childId, body) {
+  const response = await api.post(
+    `/api/children/${childId}/temperatures`,
+    body,
+  );
+  return response.data.data;
+}

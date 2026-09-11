@@ -1,91 +1,33 @@
-// GET /children/{id}/records?date=2026-08-20
+// 복약 기록은 서버 저장 API가 없어 로컬 스토어에만 둔다
+// 체온은 서버에서 오므로 여기에 없다
+function minutesAgo(minutes) {
+  return new Date(Date.now() - minutes * 60 * 1000).toISOString();
+}
+
+const emptyRecord = {
+  temperature: null,
+  medicationName: null,
+  dosage: null,
+  responseStatus: null,
+  breathingStatus: null,
+  hydrationStatus: null,
+};
+
 export const records = [
   {
-    recordId: 101,
-    type: "TEMPERATURE",
-    source: "DEVICE",
-    recordedAt: "2026-08-20T21:40:00+09:00",
-    temperature: 37.7,
-    medication: null,
+    ...emptyRecord,
+    id: 102,
+    recordType: "MEDICATION",
+    recordedAt: minutesAgo(150),
+    medicationName: "챔프 시럽",
+    dosage: 5,
   },
   {
-    recordId: 102,
-    type: "MEDICATION",
-    source: "MANUAL",
-    recordedAt: "2026-08-20T19:10:00+09:00",
-    temperature: null,
-    medication: { name: "챔프 시럽", dose: 5, doseUnit: "mL" },
-  },
-  {
-    recordId: 103,
-    type: "TEMPERATURE",
-    source: "DEVICE",
-    recordedAt: "2026-08-20T17:00:00+09:00",
-    temperature: 37.1,
-    medication: null,
-  },
-  {
-    recordId: 104,
-    type: "TEMPERATURE",
-    source: "DEVICE",
-    recordedAt: "2026-08-20T16:30:00+09:00",
-    temperature: 37.0,
-    medication: null,
-  },
-  {
-    recordId: 105,
-    type: "TEMPERATURE",
-    source: "DEVICE",
-    recordedAt: "2026-08-20T16:00:00+09:00",
-    temperature: 36.9,
-    medication: null,
-  },
-  {
-    recordId: 106,
-    type: "TEMPERATURE",
-    source: "MANUAL",
-    recordedAt: "2026-08-20T15:30:00+09:00",
-    temperature: 37.2,
-    medication: null,
-  },
-  {
-    recordId: 107,
-    type: "MEDICATION",
-    source: "MANUAL",
-    recordedAt: "2026-08-20T14:00:00+09:00",
-    temperature: null,
-    medication: { name: "타이레놀 시럽", dose: 4, doseUnit: "mL" },
-  },
-  {
-    recordId: 108,
-    type: "TEMPERATURE",
-    source: "DEVICE",
-    recordedAt: "2026-08-20T13:00:00+09:00",
-    temperature: 37.4,
-    medication: null,
-  },
-  {
-    recordId: 109,
-    type: "TEMPERATURE",
-    source: "DEVICE",
-    recordedAt: "2026-08-20T12:00:00+09:00",
-    temperature: 37.3,
-    medication: null,
-  },
-  {
-    recordId: 110,
-    type: "TEMPERATURE",
-    source: "DEVICE",
-    recordedAt: "2026-08-20T11:00:00+09:00",
-    temperature: 37.0,
-    medication: null,
-  },
-  {
-    recordId: 111,
-    type: "TEMPERATURE",
-    source: "DEVICE",
-    recordedAt: "2026-08-20T10:00:00+09:00",
-    temperature: 36.8,
-    medication: null,
+    ...emptyRecord,
+    id: 107,
+    recordType: "MEDICATION",
+    recordedAt: minutesAgo(330),
+    medicationName: "타이레놀 시럽",
+    dosage: 4,
   },
 ];

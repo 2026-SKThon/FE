@@ -196,10 +196,12 @@ function buildSummaryText(infoRows) {
 export default function SymptomExplanation() {
   const { linePoints, areaPoints, medicationX } = buildChartData();
   const records = useRecordStore((state) => state.records);
-  const latestCondition = records.find((record) => record.type === "CONDITION");
+  const latestCondition = records.find(
+    (record) => record.recordType === "CONDITION",
+  );
   const infoRows = symptomExplanationInfo.map((info) =>
     info.id === "symptom" && latestCondition
-      ? { ...info, description: buildSymptomDescription(latestCondition.condition) }
+      ? { ...info, description: buildSymptomDescription(latestCondition) }
       : info,
   );
   const [toastMessage, setToastMessage] = useState("");

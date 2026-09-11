@@ -10,9 +10,11 @@ import PeriodTabs from "../../components/home/record/PeriodTabs";
 import RecordList from "../../components/home/record/RecordList";
 import { PERIOD_OPTIONS } from "../../constants/period";
 import { PERIOD_TREND_MOCKS } from "../../constants/temperatureTrend";
+import { getTodayRecordsTop3 } from "../../api/records";
 import { getTemperatureHistory } from "../../api/temperatures";
 import { CHILD_ID } from "../../constants/api";
 import { useRecordStore } from "../../store/useRecordStore";
+import { mergeRecords } from "../../utils/record";
 import { mergeTrendWithRecords } from "../../utils/trend";
 
 const PREVIEW_COUNT = 3;
@@ -24,6 +26,7 @@ export default function Records() {
   const records = useRecordStore((state) => state.records);
 
   const [serverTrend, setServerTrend] = useState(null);
+  const [serverRecords, setServerRecords] = useState(null);
 
   useEffect(() => {
     getTemperatureHistory(CHILD_ID)
@@ -40,6 +43,10 @@ export default function Records() {
         });
       })
       .catch(() => {});
+
+    getTodayRecordsTop3(CHILD_ID)
+      .then(setServerRecords)
+      .catch(() => {});
   }, []);
 
   const periodTrends = PERIOD_TREND_MOCKS[period];
@@ -54,6 +61,12 @@ export default function Records() {
     : isLatest
       ? mergeTrendWithRecords(periodTrends[index], records)
       : periodTrends[index];
+
+  // 서버는 체온만 갖고 있어 로컬 복약·상태 기록과 합친다
+  const previewRecords = mergeRecords(serverRecords ?? [], records).slice(
+    0,
+    PREVIEW_COUNT,
+  );
 
   // 기간을 바꾸면 항상 가장 최근으로
   const changePeriod = (value) => {
@@ -84,7 +97,7 @@ export default function Records() {
             actionLabel="전체 보기"
             onAction={() => navigate("/records/today")}
           />
-          <RecordList records={records.slice(0, PREVIEW_COUNT)} />
+          <RecordList records={previewRecords} />
         </Card>
         <Button
           label="+ 기록 추가하기"

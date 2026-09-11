@@ -42,3 +42,14 @@ export function formatShortDateTime(isoString) {
 
   return `${date.getMonth() + 1}월 ${date.getDate()}일 ${formatTime(isoString)}`;
 }
+
+// 서버가 타임존 없는 문자열로 저장하므로 로컬 시각을 그대로 보낸다
+// new Date().toISOString() 은 UTC라 9시간 이르게 기록된다
+export function toServerDateTime(date = new Date()) {
+  const pad = (value) => String(value).padStart(2, "0");
+
+  return (
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+    `T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+  );
+}

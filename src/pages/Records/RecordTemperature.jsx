@@ -15,7 +15,9 @@ import {
   BODY_PART_OPTIONS,
   TEMPERATURE_FORM_DEFAULT,
 } from "../../constants/recordForm";
-import { formatDateTimeLabel } from "../../utils/datetime";
+import { formatDateTimeLabel, toServerDateTime } from "../../utils/datetime";
+import { createTemperature } from "../../api/temperatures";
+import { CHILD_ID, DEVICE_ID } from "../../constants/api";
 import { useRecordStore } from "../../store/useRecordStore";
 import { buildTemperatureRecord } from "../../utils/record";
 import { stepTemperature } from "../../utils/fever";
@@ -31,8 +33,21 @@ export default function RecordTemperature() {
 
   const updateForm = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
 
-  const handleSave = () => {
-    addRecord(buildTemperatureRecord(form));
+  const handleSave = async () => {
+    try {
+      await createTemperature(CHILD_ID, {
+        deviceId: DEVICE_ID,
+        temperature: form.temperature,
+        temperatureSource: "MANUAL",
+        measurementSite: form.bodyPart,
+        measuredAt: toServerDateTime(),
+        note: form.memo,
+      });
+    } catch {
+      // 서버 실패 시에도 시연이 끊기지 않게 로컬에 남긴다
+      addRecord(buildTemperatureRecord(form));
+    }
+
     navigate(-1);
   };
 

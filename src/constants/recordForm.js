@@ -3,13 +3,13 @@ export const BODY_PART_OPTIONS = [
   { value: "EAR", label: "귀" },
   { value: "ARMPIT", label: "겨드랑이" },
   { value: "FOREHEAD", label: "이마" },
-  { value: "ETC", label: "기타" },
+  { value: "OTHER", label: "기타" },
 ];
 
 // 아이 상태 기록 - 질문 3종
 export const CONDITION_QUESTIONS = [
   {
-    key: "activity",
+    key: "responseStatus",
     question: "컨디션은 어때요?",
     options: [
       { value: "NORMAL", label: "평소와 같아요" },
@@ -18,20 +18,20 @@ export const CONDITION_QUESTIONS = [
     ],
   },
   {
-    key: "breathing",
+    key: "breathingStatus",
     question: "호흡은 어떤가요?",
     options: [
       { value: "NORMAL", label: "평소와 같아요" },
-      { value: "LABORED", label: "힘들어보여요" },
+      { value: "DIFFICULT", label: "힘들어보여요" },
       { value: "UNKNOWN", label: "모르겠어요" },
     ],
   },
   {
-    key: "hydration",
+    key: "hydrationStatus",
     question: "수분 섭취랑 소변은 어때요?",
     options: [
       { value: "NORMAL", label: "평소와 같아요" },
-      { value: "DECREASED", label: "줄었어요" },
+      { value: "REDUCED", label: "줄었어요" },
       { value: "UNKNOWN", label: "모르겠어요" },
     ],
   },

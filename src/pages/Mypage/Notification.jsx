@@ -3,6 +3,7 @@ import InfoBadge from "../../components/mypage/InfoBadge";
 import ToggleSwitch from "../../components/mypage/ToggleSwitch";
 import InfoNotice from "../../components/mypage/InfoNotice";
 import Button from "../../components/common/Button";
+import useChildStore from "../../store/useChildStore";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +14,7 @@ export default function Notification() {
   const [share, setShare] = useState(false);
 
   const navigate = useNavigate();
+  const child = useChildStore((state) => state.child);
 
   return (
     <div className="w-full h-full bg-[#F9FAFB]">
@@ -39,7 +41,7 @@ export default function Notification() {
         </section>
         {/* 알림 종류 */}
         <section className="w-[353px] h-[270px] p-4 bg-white rounded-3xl flex flex-col justify-start items-start gap-2.5">
-          <InfoBadge text="민호" />
+          <InfoBadge text={`${child.name}`} />
           {/* 체온 변화 알림 */}
           <div className="w-[321px] h-[58px] py-2 flex justify-start items-center gap-2">
             <div className="w-[271px] h-[42px] flex flex-col justify-start items-start gap-[3px]">

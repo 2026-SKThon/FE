@@ -4,6 +4,11 @@ import Home from "./pages/Home/Home";
 import Hospital from "./pages/Hospital/Hospital";
 import Report from "./pages/Report/Report";
 import Mypage from "./pages/Mypage/Mypage";
+import ChildProfile from "./pages/Mypage/ChildProfile";
+import DeviceManagement from "./pages/Mypage/DeviceManagement";
+import Guardian from "./pages/Mypage/Guardian";
+import Notification from "./pages/Mypage/Notification";
+import RecordManagement from "./pages/Mypage/RecordManagement";
 
 export default function App() {
   return (
@@ -14,6 +19,14 @@ export default function App() {
           <Route path="/hospital" element={<Hospital />} />
           <Route path="/report" element={<Report />} />
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/mypage/profile" element={<ChildProfile />} />
+          <Route path="/mypage/device" element={<DeviceManagement />} />
+          <Route path="/mypage/guardian" element={<Guardian />} />
+          <Route path="/mypage/notification" element={<Notification />} />
+          <Route
+            path="/mypage/record-management"
+            element={<RecordManagement />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

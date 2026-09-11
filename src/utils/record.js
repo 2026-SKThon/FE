@@ -77,10 +77,10 @@ export function buildSymptomDescription(condition) {
   return `${rest}${withParticle(rest, "과", "와")} ${last}${withParticle(last, "이", "가")} 함께 기록되어 있습니다.`;
 }
 
+// recordedAt은 useRecordStore.addRecord가 채운다 (목데이터 타임라인 뒤에 이어 붙이기 위해)
 const baseRecord = () => ({
   recordId: Date.now(),
   source: "MANUAL",
-  recordedAt: new Date().toISOString(),
   temperature: null,
   medication: null,
   condition: null,

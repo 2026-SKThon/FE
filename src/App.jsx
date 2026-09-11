@@ -4,6 +4,7 @@ import Home from "./pages/Home/Home";
 import Hospital from "./pages/Hospital/Hospital";
 import Report from "./pages/Report/Report";
 import Analysis from "./pages/Report/Analysis";
+import SymptomExplanation from "./pages/Report/SymptomExplanation";
 import Mypage from "./pages/Mypage/Mypage";
 import ChildProfile from "./pages/Mypage/ChildProfile";
 import DeviceManagement from "./pages/Mypage/DeviceManagement";
@@ -20,6 +21,10 @@ export default function App() {
           <Route path="/hospital" element={<Hospital />} />
           <Route path="/report" element={<Report />} />
           <Route path="/report/analysis" element={<Analysis />} />
+          <Route
+            path="/report/analysis/symptom"
+            element={<SymptomExplanation />}
+          />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/mypage/profile" element={<ChildProfile />} />
           <Route path="/mypage/device" element={<DeviceManagement />} />

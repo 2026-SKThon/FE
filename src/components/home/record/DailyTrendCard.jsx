@@ -11,6 +11,8 @@ export default function DailyTrendCard({
   onPrevDate,
   onNextDate,
 }) {
+  const axisLabels = trend.axisLabels ?? buildTimeAxisLabels(trend.points);
+
   return (
     <Card className="flex flex-col gap-[14px]">
       <DateNavigator
@@ -24,7 +26,7 @@ export default function DailyTrendCard({
         size="full"
         referenceTemperatures={trend.referenceTemperatures}
       />
-      <ChartTimeAxis labels={buildTimeAxisLabels(trend.points)} />
+      <ChartTimeAxis labels={axisLabels} />
     </Card>
   );
 }

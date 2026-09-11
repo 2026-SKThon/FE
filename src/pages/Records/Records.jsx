@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Header from "../../components/header/header";
@@ -12,7 +12,8 @@ import { PERIOD_OPTIONS } from "../../constants/period";
 import { PERIOD_TREND_MOCKS } from "../../constants/temperatureTrend";
 import { getTodayRecordsTop3 } from "../../api/records";
 import { getTemperatureHistory } from "../../api/temperatures";
-import { CHILD_ID } from "../../constants/api";
+import { CHILD_ID, POLL_INTERVAL_MS } from "../../constants/api";
+import { usePolling } from "../../hooks/usePolling";
 import { useRecordStore } from "../../store/useRecordStore";
 import { mergeRecords } from "../../utils/record";
 import { downsamplePoints, mergeTrendWithRecords } from "../../utils/trend";
@@ -28,26 +29,25 @@ export default function Records() {
   const [serverTrend, setServerTrend] = useState(null);
   const [serverRecords, setServerRecords] = useState(null);
 
-  useEffect(() => {
-    getTemperatureHistory(CHILD_ID)
-      .then((history) => {
-        if (!history?.points?.length) return;
+  usePolling(async () => {
+    const [history, top3] = await Promise.allSettled([
+      getTemperatureHistory(CHILD_ID),
+      getTodayRecordsTop3(CHILD_ID),
+    ]);
 
-        setServerTrend({
-          points: downsamplePoints(history.points),
-          summary: {
-            current: history.currentTemperature,
-            highest: history.maxTemperature,
-            lowest: history.minTemperature,
-          },
-        });
-      })
-      .catch(() => {});
+    if (history.status === "fulfilled" && history.value?.points?.length) {
+      setServerTrend({
+        points: downsamplePoints(history.value.points),
+        summary: {
+          current: history.value.currentTemperature,
+          highest: history.value.maxTemperature,
+          lowest: history.value.minTemperature,
+        },
+      });
+    }
 
-    getTodayRecordsTop3(CHILD_ID)
-      .then(setServerRecords)
-      .catch(() => {});
-  }, []);
+    if (top3.status === "fulfilled") setServerRecords(top3.value);
+  }, POLL_INTERVAL_MS);
 
   const periodTrends = PERIOD_TREND_MOCKS[period];
   const lastIndex = periodTrends.length - 1;

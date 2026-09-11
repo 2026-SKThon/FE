@@ -1,7 +1,9 @@
 import Header from "../../components/header/header";
 import dropDown from "../../assets/icons/drop_down.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import HospitalCard from "../../components/hospital/HospitalCard";
+import { HOSPITALS } from "../../constants/hospitals";
 
 function OptionButton({ title, selected, onClick }) {
   return (
@@ -18,6 +20,7 @@ function OptionButton({ title, selected, onClick }) {
 }
 
 export default function HospitalList() {
+  const navigate = useNavigate();
   const [option, setOption] = useState("지금 운영 중");
 
   return (
@@ -51,24 +54,16 @@ export default function HospitalList() {
             onClick={() => setOption("3km 이내")}
           />
         </div>
-        <HospitalCard
-          name="○○어린이병원 응급실"
-          distance="1.2km"
-          first="24시간 운영"
-          second="소아 진료"
-        />
-        <HospitalCard
-          name="△△대학교병원 응급의료센터"
-          distance="2.4km"
-          first="24시간 운영"
-          second="응급 진료"
-        />
-        <HospitalCard
-          name="○○소아청소년과의원"
-          distance="0.6km"
-          first="소아청소년과"
-          second="외래 진료"
-        />
+        {HOSPITALS.map((hospital) => (
+          <HospitalCard
+            key={hospital.id}
+            name={hospital.name}
+            distance={hospital.distance}
+            first={hospital.first}
+            second={hospital.second}
+            onClick={() => navigate(`/hospital/detail/${hospital.id}`)}
+          />
+        ))}
         <div className="w-[353px] h-[45px] p-3 bg-[#F3F4F6] rounded-xl flex flex-col justify-start items-start">
           <p className="text-[#8B95A1] text-xs font-medium leading-5">
             진료 시간과 접수 가능 여부는 전화로 확인해 주세요.

@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import nextArrow from "../../assets/icons/next_arrow.svg";
+import thisHospitalIcon from "../../assets/icons/this_hospital.svg";
 import { currentLocation } from "../../constants/location";
+import { HOSPITALS } from "../../constants/hospitals";
+import { callHospital, openDirections } from "../../utils/hospital";
+import { searchHospitals } from "../../api/hospitals";
 
 /* 페이지 전체 - 지도가 남은 세로 공간을 전부 채우도록 flex column */
 const PageWrapper = styled.div`
@@ -253,13 +257,20 @@ export default function Hospital() {
   const navigate = useNavigate();
   const mapElementRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const markersRef = useRef([]);
+  const [mapReady, setMapReady] = useState(false);
   const [activeFilter, setActiveFilter] = useState(FILTERS[0]);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  // 검색 API 응답 오기 전까지는 더미 데이터로 채워둠
+  const [hospitals, setHospitals] = useState(HOSPITALS);
+  // 마커 클릭으로 선택된 병원 - 없으면 가장 가까운 병원을 기본으로 보여줌
+  const [selectedHospitalId, setSelectedHospitalId] = useState(null);
 
+  // 지도 초기화 (한 번만)
   useEffect(() => {
     if (!window.naver?.maps || !mapElementRef.current) return;
 
-    // 더미 데이터 - src/constants/location.js에서 관리, 추후 백엔드 위치 API로 교체 예정
-    mapInstanceRef.current = new window.naver.maps.Map(mapElementRef.current, {
+    const map = new window.naver.maps.Map(mapElementRef.current, {
       center: new window.naver.maps.LatLng(
         currentLocation.latitude,
         currentLocation.longitude,
@@ -268,7 +279,84 @@ export default function Hospital() {
       zoomControl: false, // 네이버 기본 확대/축소 컨트롤 대신 커스텀 버튼 사용
       // 네이버 지도 로고는 API 이용약관상 필수 표기 요소라 제거하지 않음
     });
+    mapInstanceRef.current = map;
+    setMapReady(true);
   }, []);
+
+  // 병원명/지역 키워드 + 현재 위치로 병원 검색 (setState는 호출부에서 처리)
+  const fetchHospitals = (keyword) =>
+    searchHospitals({
+      keyword: keyword || "병원",
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
+    });
+
+  // 첫 진입 시 현재 위치 기준으로 한 번 검색
+  useEffect(() => {
+    let ignore = false;
+
+    fetchHospitals("")
+      .then((results) => {
+        if (!ignore) setHospitals(results);
+      })
+      .catch((err) => console.error("병원 검색 실패", err));
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  // "3km 이내" 필터가 켜져 있으면 클라이언트에서 distanceKm 기준으로 좁힘
+  const visibleHospitals =
+    activeFilter === "3km 이내"
+      ? hospitals.filter(
+          (hospital) =>
+            hospital.distanceKm != null && hospital.distanceKm <= 3,
+        )
+      : hospitals;
+
+  // 마커를 클릭해서 고른 병원이 있으면 그걸, 없으면 가장 가까운 병원을 보여줌
+  const selectedHospital =
+    visibleHospitals.find((hospital) => hospital.id === selectedHospitalId) ??
+    visibleHospitals[0] ??
+    HOSPITALS[0];
+
+  // 검색 결과(또는 3km 필터)가 바뀔 때마다 마커 다시 그리기
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!mapReady || !map) return;
+
+    markersRef.current.forEach((marker) => marker.setMap(null));
+    markersRef.current = visibleHospitals.map((hospital) => {
+      const marker = new window.naver.maps.Marker({
+        position: new window.naver.maps.LatLng(
+          hospital.latitude,
+          hospital.longitude,
+        ),
+        map,
+        icon: {
+          url: thisHospitalIcon,
+          size: new window.naver.maps.Size(42, 50),
+          scaledSize: new window.naver.maps.Size(42, 50),
+          anchor: new window.naver.maps.Point(21, 49),
+        },
+      });
+
+      // 마커 클릭 시 하단 카드에 해당 병원 정보 표시
+      window.naver.maps.Event.addListener(marker, "click", () => {
+        setSelectedHospitalId(hospital.id);
+      });
+
+      return marker;
+    });
+  }, [mapReady, visibleHospitals]);
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key !== "Enter") return;
+    fetchHospitals(searchKeyword)
+      .then(setHospitals)
+      .catch((err) => console.error("병원 검색 실패", err));
+  };
 
   const handleZoomIn = () => {
     const map = mapInstanceRef.current;
@@ -305,7 +393,12 @@ export default function Hospital() {
               strokeLinecap="round"
             />
           </SearchIcon>
-          <SearchInput placeholder="병원명 또는 지역 검색" />
+          <SearchInput
+            placeholder="병원명 또는 지역 검색"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
+          />
         </SearchBar>
 
         <FilterRow>
@@ -341,16 +434,36 @@ export default function Hospital() {
             <ListViewIcon src={nextArrow} alt="" />
           </ListViewButton>
 
-          {/* 더미 데이터 - 지도에서 선택된 병원 정보, API 연동 예정 */}
+          {/* 지도에 표시된 병원 중 가장 가까운 병원 정보 (검색 결과 없으면 더미로 대체) */}
           <HospitalCard>
             <HospitalCardHeader>
-              <HospitalName>○○어린이병원 응급실</HospitalName>
-              <HospitalDistance>1.2km</HospitalDistance>
+              <HospitalName>{selectedHospital.name}</HospitalName>
+              <HospitalDistance>
+                {selectedHospital.distanceKm != null
+                  ? `${selectedHospital.distanceKm}km`
+                  : selectedHospital.distance}
+              </HospitalDistance>
             </HospitalCardHeader>
-            <HospitalMeta>24시간 운영 · 소아 진료</HospitalMeta>
+            <HospitalMeta>
+              {selectedHospital.category
+                ? `${selectedHospital.category}${
+                    selectedHospital.hasEmergencyRoom ? " · 응급실 운영" : ""
+                  }`
+                : `${selectedHospital.first} · ${selectedHospital.second}`}
+            </HospitalMeta>
             <HospitalButtonRow>
-              <CallButton type="button">전화하기</CallButton>
-              <DirectionButton type="button">길찾기</DirectionButton>
+              <CallButton
+                type="button"
+                onClick={() => callHospital(selectedHospital.phone)}
+              >
+                전화하기
+              </CallButton>
+              <DirectionButton
+                type="button"
+                onClick={() => openDirections(selectedHospital)}
+              >
+                길찾기
+              </DirectionButton>
             </HospitalButtonRow>
           </HospitalCard>
         </FloatingBottomArea>

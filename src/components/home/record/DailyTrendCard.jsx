@@ -10,6 +10,8 @@ export default function DailyTrendCard({
   dateLabel,
   onPrevDate,
   onNextDate,
+  showPrev,
+  showNext,
 }) {
   const axisLabels = trend.axisLabels ?? buildTimeAxisLabels(trend.points);
 
@@ -19,6 +21,8 @@ export default function DailyTrendCard({
         label={dateLabel}
         onPrev={onPrevDate}
         onNext={onNextDate}
+        showPrev={showPrev}
+        showNext={showNext}
       />
       <TemperatureSummary summary={trend.summary} />
       <TemperatureChart

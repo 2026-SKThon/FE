@@ -1,16 +1,10 @@
 import { create } from "zustand";
 
 const useChildStore = create((set) => ({
-  // 변수
-  child: {
-    name: "민호",
-    afterBirth: "생후 11개월",
-    birthDate: "2025.10.02",
-    weight: "9.2kg",
-    allergy: "미입력",
-  },
+  // 아이 정보
+  child: null,
 
-  // 함수
+  // 아이 정보 변경
   setChild: (child) => set({ child }),
 }));
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import calendarIcon from "../../assets/icons/calender.svg";
 import slashDivider from "../../assets/icons/slash_divider.svg";
 import nextArrow from "../../assets/icons/next_arrow.svg";
+import { dailyTemperatureTrend } from "../../constants/temperatureTrend";
 
 /* 페이지 좌우 공통 여백 20px */
 const Wrapper = styled.div`
@@ -29,7 +30,7 @@ const DateBadge = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  border-radius: 9999px;
+  border-radius: 8px;
   background: #f3f4f6;
   padding: 6px 12px;
 `;
@@ -70,6 +71,7 @@ const CardHeading = styled.h2`
   font-size: 20px;
   font-weight: 700;
   line-height: 1.375;
+  padding-left: 10px;
   color: ${({ theme }) => theme.colors.gray900};
 `;
 
@@ -77,6 +79,7 @@ const CardHeading = styled.h2`
 const CardSubText = styled.p`
   margin-top: 2.625px;
   font-size: 12px;
+  padding-left: 10px;
   color: ${({ theme }) => theme.colors.gray500};
 `;
 
@@ -119,7 +122,6 @@ const SlashDivider = styled.img`
 const TempValue = styled.span`
   font-size: 16px;
   font-weight: 700;
-  margin-left: 8px;
   color: ${({ theme }) => theme.colors.gray500};
 `;
 
@@ -127,7 +129,6 @@ const TempValue = styled.span`
 const TempValueAccent = styled.span`
   font-size: 16px;
   font-weight: 700;
-  margin-left: 8px;
   color: ${({ theme }) => theme.colors.red};
 `;
 
@@ -138,7 +139,7 @@ const NoteText = styled.p`
 `;
 
 /* 더미 데이터 - 함께 남긴 기록도 API로 받아올 예정 */
-/* 복약 정보 텍스트 묶음 - 내부 gap 8px */
+/* 복약 정보 텍스트 묶음 - 내부 gap 0 */
 const MedInfoGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -237,6 +238,24 @@ export default function Report() {
     day: "numeric",
   });
 
+  // 더미 데이터 - 체온 관련 값은 전부 temperatureTrend.js에서 가져옴 (디자인은 그대로 유지)
+  const { current: currentTemp, highest: highestTemp } =
+    dailyTemperatureTrend.summary;
+  const latestPoint =
+    dailyTemperatureTrend.points[dailyTemperatureTrend.points.length - 1];
+  const measuredTime = new Date(latestPoint.measuredAt).toLocaleTimeString(
+    "ko-KR",
+    { hour: "2-digit", minute: "2-digit", hour12: false },
+  );
+  const peakTime = new Date(
+    dailyTemperatureTrend.peak.measuredAt,
+  ).toLocaleTimeString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+  const tempDiff = (highestTemp - currentTemp).toFixed(1);
+
   return (
     <Wrapper>
       <HeaderBar>
@@ -247,7 +266,7 @@ export default function Report() {
         </DateBadge>
       </HeaderBar>
 
-      {/* TODO: 틀만 구성 - 실제 데이터 연동 예정 */}
+
       <Card>
         <div>
           <CardHeading>
@@ -260,16 +279,16 @@ export default function Report() {
 
         <Divider />
 
-        {/* 더미 데이터 - 오늘 체온 흐름 전부 API로 받아올 예정 */}
         <Section>
           <SectionTitle>오늘 체온 흐름</SectionTitle>
           <TempRow>
-            최근 <TempValue>37.7°C</TempValue>
+            최근 <TempValue>{currentTemp}°C</TempValue>
             <SlashDivider src={slashDivider} alt="" />
-            최고 <TempValueAccent>38.6°C</TempValueAccent>
+            최고 <TempValueAccent>{highestTemp}°C</TempValueAccent>
           </TempRow>
           <NoteText>
-            21:40 측정 · 19:00 최고 기록보다 0.9°C 낮아요
+            {measuredTime} 측정 · {peakTime} 최고 기록보다 {tempDiff}°C
+            낮아요
             <br />
             관측된 측정값 기준 · 기록 없는 구간은 제외
           </NoteText>
@@ -277,7 +296,6 @@ export default function Report() {
 
         <Divider />
 
-        {/* 더미 데이터 - 함께 남긴 기록도 API로 받아올 예정 */}
         <Section>
           <SectionTitle>함께 남긴 기록</SectionTitle>
           <MedInfoGroup>
@@ -297,7 +315,6 @@ export default function Report() {
 
         <Divider />
 
-        {/* 더미 데이터 - AI 분석 결과 연결 링크는 추후 실제 라우팅/API 연동 예정 */}
         <SummaryBlock>
           <div>
             <SectionTitle>의료진에게 보여줄 요약</SectionTitle>
@@ -308,10 +325,10 @@ export default function Report() {
           </AiButton>
         </SummaryBlock>
 
-        <FooterLink type="button">
+        {/* <FooterLink type="button">
           요약에 사용한 기록 보기
           <NextArrowIcon src={nextArrow} alt="" />
-        </FooterLink>
+        </FooterLink> */}
       </Card>
     </Wrapper>
   );

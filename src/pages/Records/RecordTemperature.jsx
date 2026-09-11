@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import decoThermometer from "../../assets/images/deco_thermometer.svg";
 import Button from "../../components/common/Button";
 import Card from "../../components/common/Card";
@@ -13,8 +15,17 @@ import {
   TEMPERATURE_FORM_DEFAULT,
 } from "../../constants/recordForm";
 import { formatDateTimeLabel } from "../../utils/datetime";
+import { stepTemperature } from "../../utils/fever";
 
 export default function RecordTemperature() {
+  const [form, setForm] = useState({
+    temperature: TEMPERATURE_FORM_DEFAULT.temperature,
+    bodyPart: TEMPERATURE_FORM_DEFAULT.bodyPart,
+    memo: "",
+  });
+
+  const updateForm = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
   return (
     <div className="relative flex flex-1 flex-col bg-[#FBFBFB]">
       <Header title="체온 기록" />
@@ -38,7 +49,13 @@ export default function RecordTemperature() {
         <Card className="flex flex-col gap-[12px] p-[18px]">
           <TemperatureStepper
             label="측정한 체온"
-            value={TEMPERATURE_FORM_DEFAULT.temperature}
+            value={form.temperature}
+            onIncrease={() =>
+              updateForm("temperature", stepTemperature(form.temperature, 0.1))
+            }
+            onDecrease={() =>
+              updateForm("temperature", stepTemperature(form.temperature, -0.1))
+            }
           />
           <DateTimeField
             label="측정 일시"
@@ -48,7 +65,8 @@ export default function RecordTemperature() {
           <ChipGroup
             label="측정 부위"
             options={BODY_PART_OPTIONS}
-            value={TEMPERATURE_FORM_DEFAULT.bodyPart}
+            value={form.bodyPart}
+            onChange={(value) => updateForm("bodyPart", value)}
           />
         </Card>
 
@@ -56,6 +74,8 @@ export default function RecordTemperature() {
           title="메모 · 선택"
           placeholder="측정할 때 아이의 상태를 적어주세요"
           variant="card"
+          value={form.memo}
+          onChange={(value) => updateForm("memo", value)}
         />
 
         <p className="text-[12px] font-medium leading-[20px] text-[#B0B8C1]">

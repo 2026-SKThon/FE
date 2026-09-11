@@ -7,6 +7,7 @@ export const FEVER_THRESHOLD = {
 const DEVICE_PATH = "/mypage/device";
 const CONDITION_PATH = "/records/new/condition";
 export const RECORDS_PATH = "/records";
+const HOSPITAL_PATH = "/hospital";
 
 const CONNECTED_TAG = {
   label: "기기 연결",
@@ -37,6 +38,7 @@ export const FEVER_LEVEL = {
     primaryAction: "아이 상태 기록하기",
     primaryPath: CONDITION_PATH,
     secondaryAction: "복약 • 증상 기록 함께 보기",
+    secondaryPath: RECORDS_PATH,
   },
 
   CAUTION: {
@@ -60,6 +62,7 @@ export const FEVER_LEVEL = {
     primaryAction: "지금 아이 상태 확인",
     primaryPath: RECORDS_PATH,
     secondaryAction: "가까운 병원·약국 찾기",
+    secondaryPath: HOSPITAL_PATH,
   },
 
   DANGER: {
@@ -83,6 +86,7 @@ export const FEVER_LEVEL = {
     primaryAction: "지금 아이 상태 확인",
     primaryPath: RECORDS_PATH,
     secondaryAction: "긴급 증상이 있나요? 도움 요청",
+    secondaryPath: HOSPITAL_PATH,
   },
 
   OFFLINE: {
@@ -111,5 +115,6 @@ export const FEVER_LEVEL = {
     primaryAction: "기기 연결 확인하기",
     primaryPath: DEVICE_PATH,
     secondaryAction: "체온계 측정·아이 상태 확인",
+    secondaryPath: HOSPITAL_PATH,
   },
 };

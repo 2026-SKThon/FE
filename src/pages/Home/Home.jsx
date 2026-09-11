@@ -70,7 +70,7 @@ export default function Home() {
           recordLabel={level.primaryAction}
           hospitalLabel={level.secondaryAction}
           onRecord={() => navigate(level.primaryPath)}
-          onFindHospital={() => navigate("/hospital")}
+          onFindHospital={() => navigate(level.secondaryPath)}
         />
       </div>
     </div>

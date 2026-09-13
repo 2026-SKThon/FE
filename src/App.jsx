@@ -5,6 +5,9 @@ import Hospital from "./pages/Hospital/Hospital";
 import Records from "./pages/Records/Records";
 import RecordsAll from "./pages/Records/RecordsAll";
 import RecordAdd from "./pages/Records/RecordAdd";
+import RecordTemperature from "./pages/Records/RecordTemperature";
+import RecordCondition from "./pages/Records/RecordCondition";
+import RecordMedication from "./pages/Records/RecordMedication";
 import Report from "./pages/Report/Report";
 import Analysis from "./pages/Report/Analysis";
 import SymptomExplanation from "./pages/Report/SymptomExplanation";
@@ -14,6 +17,8 @@ import DeviceManagement from "./pages/Mypage/DeviceManagement";
 import Guardian from "./pages/Mypage/Guardian";
 import Notification from "./pages/Mypage/Notification";
 import RecordManagement from "./pages/Mypage/RecordManagement";
+import HospitalList from "./pages/Hospital/HospitalList";
+import HospitalDetail from "./pages/Hospital/HospitalDetail";
 
 export default function App() {
   return (
@@ -24,7 +29,21 @@ export default function App() {
           <Route path="/records" element={<Records />} />
           <Route path="/records/today" element={<RecordsAll />} />
           <Route path="/records/new" element={<RecordAdd />} />
+          <Route
+            path="/records/new/temperature"
+            element={<RecordTemperature />}
+          />
+          <Route path="/records/new/condition" element={<RecordCondition />} />
+          <Route
+            path="/records/new/medication"
+            element={<RecordMedication />}
+          />
           <Route path="/hospital" element={<Hospital />} />
+          <Route path="/hospital/list" element={<HospitalList />} />
+          <Route
+            path="/hospital/detail/:hospitalId"
+            element={<HospitalDetail />}
+          />
           <Route path="/report" element={<Report />} />
           <Route path="/report/analysis" element={<Analysis />} />
           <Route

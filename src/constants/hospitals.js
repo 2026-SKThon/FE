@@ -1,0 +1,40 @@
+// GET /hospitals/nearby - 더미 데이터, 추후 실제 병원 검색 API로 교체 예정
+// 좌표는 src/constants/location.js의 currentLocation 근처로 맞춰둠 (지도에 마커가 보이도록)
+export const HOSPITALS = [
+  {
+    id: 1,
+    name: "○○어린이병원 응급실",
+    distance: "1.2km",
+    first: "24시간 운영",
+    second: "소아 진료",
+    latitude: 37.62287,
+    longitude: 127.01879,
+    address: "○○구 ○○로 12",
+    phone: "02-000-0000",
+    travelTime: "차량 6분",
+  },
+  {
+    id: 2,
+    name: "△△대학교병원 응급의료센터",
+    distance: "2.4km",
+    first: "24시간 운영",
+    second: "응급 진료",
+    latitude: 37.59987,
+    longitude: 127.02779,
+    address: "△△구 △△로 34",
+    phone: "02-000-0001",
+    travelTime: "차량 9분",
+  },
+  {
+    id: 3,
+    name: "○○소아청소년과의원",
+    distance: "0.6km",
+    first: "소아청소년과",
+    second: "외래 진료",
+    latitude: 37.61887,
+    longitude: 127.00979,
+    address: "○○구 ○○길 56",
+    phone: "02-000-0002",
+    travelTime: "도보 8분",
+  },
+];

@@ -3,15 +3,17 @@ import { useNavigate } from "react-router-dom";
 import InfoBadge from "../../components/mypage/InfoBadge";
 import InfoNotice from "../../components/mypage/InfoNotice";
 import Button from "../../components/common/Button";
+import useChildStore from "../../store/useChildStore";
 
 export default function Guardian() {
   const navigate = useNavigate();
+  const child = useChildStore((state) => state.child);
 
   return (
     <div className="w-full h-full bg-[#F9FAFB]">
       <MypageHeader title="함께 돌보는 보호자" onClick={() => navigate(-1)} />
       <main className="w-[393px] h-[728px] px-5 pt-2 pb-5 flex flex-col justify-start items-start gap-3.5">
-        <InfoBadge text="민호의 기록 공유" />
+        <InfoBadge text={`${child.name}의 기록 공유`} />
         <p className="text-[#191F28] text-2xl font-bold leading-9">
           함께 돌보는 사람과
           <br />
@@ -42,7 +44,7 @@ export default function Guardian() {
             />
           </div>
           <p className="text-[#6B7684] text-xs font-normal leading-5">
-            민호의 기록을 보고, 상태 · 복약 기록을
+            {child.name}의 기록을 보고, 상태 · 복약 기록을
             <br />
             추가할 수 있어요.
           </p>
@@ -59,7 +61,7 @@ export default function Guardian() {
         {/* 공유 범위 */}
         <section className="w-[353px] h-[106px] p-4 bg-white rounded-3xl flex flex-col justify-start items-start gap-2.5">
           <p className="text-[#191F28] text-base font-bold leading-6">
-            민호의 기록만 공유돼요
+            {child.name}의 기록만 공유돼요
           </p>
           <p className="text-[#6B7684] text-xs font-normal leading-5">
             체온·증상·복약 기록과 진료 설명문을 공유해요. 다른 아이

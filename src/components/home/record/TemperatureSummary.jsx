@@ -1,4 +1,5 @@
 import SummaryItem from "./SummaryItem";
+import { formatTemperature } from "../../../utils/fever";
 
 export default function TemperatureSummary({ summary }) {
   const items = [
@@ -13,7 +14,7 @@ export default function TemperatureSummary({ summary }) {
         <SummaryItem
           key={item.label}
           label={item.label}
-          value={`${item.value}°C`}
+          value={formatTemperature(item.value)}
           highlight={item.highlight}
         />
       ))}

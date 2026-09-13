@@ -154,7 +154,7 @@ export default function Analysis() {
 
   return (
     <div>
-      <Header title="AI 분석 결과" />
+      <Header title="요약 결과" />
 
       <ContentWrapper>
         <TopCard>

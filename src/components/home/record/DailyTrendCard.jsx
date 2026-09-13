@@ -10,13 +10,19 @@ export default function DailyTrendCard({
   dateLabel,
   onPrevDate,
   onNextDate,
+  showPrev,
+  showNext,
 }) {
+  const axisLabels = trend.axisLabels ?? buildTimeAxisLabels(trend.points);
+
   return (
     <Card className="flex flex-col gap-[14px]">
       <DateNavigator
         label={dateLabel}
         onPrev={onPrevDate}
         onNext={onNextDate}
+        showPrev={showPrev}
+        showNext={showNext}
       />
       <TemperatureSummary summary={trend.summary} />
       <TemperatureChart
@@ -24,7 +30,7 @@ export default function DailyTrendCard({
         size="full"
         referenceTemperatures={trend.referenceTemperatures}
       />
-      <ChartTimeAxis labels={buildTimeAxisLabels(trend.points)} />
+      <ChartTimeAxis labels={axisLabels} />
     </Card>
   );
 }

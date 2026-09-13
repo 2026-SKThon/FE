@@ -6,16 +6,22 @@ import FeverStatusPill from "./FeverStatusPill";
 export default function FeverStatusCard({
   childName,
   temperature,
-  statusMessage,
   caption,
+  levelKey,
+  level,
 }) {
   return (
     <Card className="relative flex h-[360px] flex-col justify-end">
-      <FeverIllustration />
+      <FeverIllustration level={levelKey} />
       <div className="relative flex flex-col items-end gap-[8px]">
-        <CurrentTemperature childName={childName} temperature={temperature} />
+        <CurrentTemperature
+          childName={childName}
+          temperature={temperature}
+          color={level.temperatureColor}
+          showChildLabel={level.showChildLabel}
+        />
         <div className="flex w-full flex-col gap-[7px]">
-          <FeverStatusPill message={statusMessage} />
+          <FeverStatusPill {...level.pill} />
           <p className="text-center text-[12px] leading-[17px] text-[#8B95A1]">
             {caption}
           </p>
